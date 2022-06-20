@@ -81,9 +81,8 @@ class LoginActivity : AppCompatActivity() {
             password?.error = null
         }
 
-        if (txt_email?.isEmpty() == true || android.util.Patterns.EMAIL_ADDRESS.matcher(txt_email)
-                .matches()
-        ) {
+        if (txt_email?.isEmpty() == true) //TODO
+             {
             email?.error = "enter a valid email address"
             valid = false
         } else {
