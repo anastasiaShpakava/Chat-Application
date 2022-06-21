@@ -17,11 +17,11 @@ class RegisterActivity : AppCompatActivity() {
     private var username: EditText? = null
     private var email: EditText? = null
     private var password: EditText? = null
-    private var button_register: Button? = null
+    private var buttonRegister: Button? = null
 
-    var txt_username: String? = null
-    var txt_email: String? = null
-    var txt_password: String? = null
+    var txtUsername: String? = null
+    var txtEmail: String? = null
+    var txtPassword: String? = null
 
     private var auth: FirebaseAuth? = null
     private var reference: DatabaseReference? = null
@@ -30,42 +30,45 @@ class RegisterActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_register)
 
+        init()
+    }
+
+    private fun init() {
         val toolbar: Toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
-        supportActionBar?.setTitle("Register")
+        supportActionBar?.title = "Register"
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         username = findViewById(R.id.editTextUsername)
-        email = findViewById(R.id.editTextEmail)
-        password = findViewById(R.id.editTextPassword)
-        button_register = findViewById(R.id.buttonRegister)
+        email = findViewById(R.id.edit_text_email)
+        password = findViewById(R.id.edit_text_password)
+        buttonRegister = findViewById(R.id.button_register)
 
         auth = FirebaseAuth.getInstance()
 
-        button_register?.setOnClickListener {
-            txt_username = username?.text.toString()
-            txt_email = email?.text.toString()
-            txt_password = password?.text.toString()
+        buttonRegister?.setOnClickListener {
+            txtUsername = username?.text.toString()
+            txtEmail = email?.text.toString()
+            txtPassword = password?.text.toString()
 
             if (validate()) {
-                register(txt_username!!, txt_password!!, txt_email!!)
+                register(txtUsername!!, txtPassword!!, txtEmail!!)
             }
         }
-
     }
 
     private fun validate(): Boolean {
         var valid = true
 
-        if (txt_username?.isEmpty() == true || txt_username?.length!! < 3) {
+        if (txtUsername?.isEmpty() == true || txtUsername?.length!! < 3) {
             username?.error = "at least 3 characters"
             valid = false
         } else {
             username?.error = null
         }
 
-        if (txt_password?.isEmpty() == true || txt_password?.length!! < 4
-            || txt_password?.length!! > 10
+        if (txtPassword?.isEmpty() == true || txtPassword?.length!! < 4
+            || txtPassword?.length!! > 10
         ) {
             password?.error = "between 4 and 10 alphanumeric characters"
             valid = false
@@ -73,7 +76,7 @@ class RegisterActivity : AppCompatActivity() {
             password?.error = null
         }
 
-        if (txt_email?.isEmpty() == true) {
+        if (txtEmail?.isEmpty() == true) {
             email?.error = "enter a valid email address"
             valid = false
         } else {
@@ -81,7 +84,6 @@ class RegisterActivity : AppCompatActivity() {
         }
 
         return valid
-
     }
 
     private fun register(userName: String, password: String, email: String) {
@@ -108,8 +110,6 @@ class RegisterActivity : AppCompatActivity() {
                                 startActivity(intent)
                             }
                         }
-
-
                     }
                 } else {
                     Toast.makeText(

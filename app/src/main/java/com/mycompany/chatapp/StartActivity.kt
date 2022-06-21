@@ -4,24 +4,42 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 
 class StartActivity : AppCompatActivity() {
 
-    var start_register_button: Button?=null
-    var start_login_button: Button?=null
+    private var startRegisterButton: Button? = null
+    private var startLoginButton: Button? = null
+
+    private var firebaseUser: FirebaseUser? = null
+
+    override fun onStart() {
+        super.onStart()
+
+        firebaseUser = FirebaseAuth.getInstance().currentUser
+        if (firebaseUser != null) {
+            startActivity(Intent(this, MainActivity::class.java))
+            finish()
+        }
+
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_start)
+        init()
+    }
 
-        start_register_button = findViewById(R.id.startButtonRegister)
-        start_login_button = findViewById(R.id.startButtonLogin)
+    private fun init() {
+        startRegisterButton = findViewById(R.id.start_button_register)
+        startLoginButton = findViewById(R.id.start_button_login)
 
-        start_login_button?.setOnClickListener {
+        startLoginButton?.setOnClickListener {
             startActivity(Intent(this, LoginActivity::class.java))
         }
 
-       start_register_button?.setOnClickListener {
+        startRegisterButton?.setOnClickListener {
             startActivity(Intent(this, RegisterActivity::class.java))
         }
     }

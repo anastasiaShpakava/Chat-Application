@@ -8,16 +8,15 @@ import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.widget.Toolbar
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.FirebaseDatabase
 
 class LoginActivity : AppCompatActivity() {
 
     private var email: EditText? = null
     private var password: EditText? = null
-    private var button_register: Button? = null
+    private var buttonRegister: Button? = null
 
-    var txt_email: String? = null
-    var txt_password: String? = null
+    var txtEmail: String? = null
+    var txtPassword: String? = null
 
     private var auth: FirebaseAuth? = null
 
@@ -26,9 +25,13 @@ class LoginActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
 
-        email = findViewById(R.id.editTextEmail)
-        password = findViewById(R.id.editTextPassword)
-        button_register = findViewById(R.id.buttonRegister)
+        init()
+    }
+
+    private fun init() {
+        email = findViewById(R.id.edit_text_email)
+        password = findViewById(R.id.edit_text_password)
+        buttonRegister = findViewById(R.id.button_register)
 
         val toolbar: Toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
@@ -37,17 +40,15 @@ class LoginActivity : AppCompatActivity() {
 
         auth = FirebaseAuth.getInstance()
 
-        button_register?.setOnClickListener {
+        buttonRegister?.setOnClickListener {
 
-            txt_email = email?.text.toString()
-            txt_password = password?.text.toString()
+            txtEmail = email?.text.toString()
+            txtPassword = password?.text.toString()
 
             if (validate()) {
-                logIn(txt_email!!, txt_password!!)
+                logIn(txtEmail!!, txtPassword!!)
             }
         }
-
-
     }
 
     private fun logIn(password: String, email: String) {
@@ -72,8 +73,8 @@ class LoginActivity : AppCompatActivity() {
     private fun validate(): Boolean {
         var valid = true
 
-        if (txt_password?.isEmpty() == true || txt_password?.length!! < 4
-            || txt_password?.length!! > 10
+        if (txtPassword?.isEmpty() == true || txtPassword?.length!! < 4
+            || txtPassword?.length!! > 10
         ) {
             password?.error = "between 4 and 10 alphanumeric characters"
             valid = false
@@ -81,15 +82,13 @@ class LoginActivity : AppCompatActivity() {
             password?.error = null
         }
 
-        if (txt_email?.isEmpty() == true) //TODO
-             {
+        if (txtEmail?.isEmpty() == true) //TODO
+        {
             email?.error = "enter a valid email address"
             valid = false
         } else {
             email?.error = null
         }
-
         return valid
-
     }
 }

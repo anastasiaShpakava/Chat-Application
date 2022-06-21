@@ -11,34 +11,34 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
         android:text="Chat App"
         android:textSize="25sp"
-        android:textStyle="bold"
-        android:gravity="center_horizontal"/>
+        android:textStyle="bold" />
 
     <Button
-        android:id="@+id/startButtonRegister"
+        android:id="@+id/start_button_register"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/button"
-        android:foreground="?android:attr/selectableItemBackground"
-        android:layout_marginRight="20dp"
         android:layout_marginLeft="20dp"
         android:layout_marginTop="100dp"
+        android:layout_marginRight="20dp"
+        android:background="@drawable/button"
+        android:foreground="?android:attr/selectableItemBackground"
         android:text="@string/registration"
         android:textAllCaps="false"
         android:textColor="#FE5295"
         android:textSize="20sp" />
 
     <Button
-        android:id="@+id/startButtonLogin"
+        android:id="@+id/start_button_login"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/button"
-        android:foreground="?android:attr/selectableItemBackground"
-        android:layout_marginRight="20dp"
         android:layout_marginLeft="20dp"
         android:layout_marginTop="10dp"
+        android:layout_marginRight="20dp"
+        android:background="@drawable/button"
+        android:foreground="?android:attr/selectableItemBackground"
         android:text="@string/Login"
         android:textAllCaps="false"
         android:textColor="#FE5295"
