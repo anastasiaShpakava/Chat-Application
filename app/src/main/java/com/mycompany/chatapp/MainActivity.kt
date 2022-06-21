@@ -4,13 +4,21 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.TableLayout
+
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentPagerAdapter
+import androidx.viewpager.widget.ViewPager
 import com.bumptech.glide.Glide
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.*
+import com.mycompany.chatapp.fragments.ChatsFragment
+import com.mycompany.chatapp.fragments.UserFragment
 import com.mycompany.chatapp.model.User
 import de.hdodenhof.circleimageview.CircleImageView
 
@@ -58,6 +66,17 @@ class MainActivity : AppCompatActivity() {
 
             }
         })
+
+        val tableLayout: TableLayout = findViewById(R.id.tab_layout)
+        val viewPager: ViewPager = findViewById(R.id.view_pager)
+
+        val viewPagerAdapter= ViewPagerAdapter(supportFragmentManager)
+        viewPagerAdapter.addFragment(ChatsFragment(),"Chats")
+        viewPagerAdapter.addFragment(UserFragment(),"Users")
+
+        viewPager.adapter=viewPagerAdapter
+
+        tableLayout.setupWithViewPager(viewPager)
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -75,5 +94,29 @@ class MainActivity : AppCompatActivity() {
             }
         }
         return false
+    }
+
+    class ViewPagerAdapter(
+        fragmentManager: FragmentManager,
+        private val fragments: ArrayList<Fragment>,
+        private val titles: ArrayList<String>
+    ) : FragmentPagerAdapter(fragmentManager) {
+
+        override fun getCount(): Int {
+          return fragments.size
+        }
+
+        override fun getItem(position: Int): Fragment {
+           return fragments[position]
+        }
+
+        fun addFragment(fragment:Fragment, title:String){
+            fragments.add(fragment)
+            titles.add(title)
+        }
+
+        override fun getPageTitle(position: Int): CharSequence? {
+            return titles[position]
+        }
     }
 }
