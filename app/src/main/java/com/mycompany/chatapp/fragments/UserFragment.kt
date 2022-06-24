@@ -9,11 +9,11 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
-import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.*
 import com.mycompany.chatapp.R
 import com.mycompany.chatapp.adapter.UserAdapter
 import com.mycompany.chatapp.model.User
+import java.util.*
 
 class UserFragment : Fragment() {
 
@@ -41,8 +41,22 @@ class UserFragment : Fragment() {
         var firebaseUser: FirebaseUser? = FirebaseAuth.getInstance().currentUser
         var databaseReference:DatabaseReference = FirebaseDatabase.getInstance().getReference("Users")
 
-        databaseReference.addValueEventListener()
+        databaseReference.addValueEventListener(object : ValueEventListener{
+            override fun onDataChange(dataSnapshot: DataSnapshot){
+               usersList?.clear()
+                for(data in dataSnapshot.children){
+                    val user: User? =data.getValue(User::class.java)
+                    if (user?.id.equals(firebaseUser?.uid)){
+                        usersList?.add(user!!)
+                    }
+                }
+                userAdapter = UserAdapter(context!!,usersList!!)
+                recyclerView?.adapter = userAdapter
+            }
+            override fun onCancelled(error: DatabaseError) {
+                // Failed to read value
+
+            }
+        })
     }
-
-
 }

@@ -10,6 +10,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.ChatApp">
         <activity
+            android:name=".MessageActivity"
+            android:exported="false" />
+        <activity
             android:name=".LoginActivity"
             android:exported="false"
             android:parentActivityName=".StartActivity" />
@@ -31,7 +34,6 @@
             android:name=".RegisterActivity"
             android:exported="false"
             android:parentActivityName=".StartActivity" />
-
     </application>
 
 </manifest>

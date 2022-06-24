@@ -4,7 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import android.widget.TableLayout
+import com.google.android.material.tabs.TabLayout
 
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
@@ -30,6 +30,9 @@ class MainActivity : AppCompatActivity() {
     private var firebaseUser: FirebaseUser? = null
     private var databaseReference: DatabaseReference? = null
 
+    private val fragments: ArrayList<Fragment>?=null
+    private val titles: ArrayList<String>?=null
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,6 +42,10 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun init() {
+
+        fragments?.add(supportFragmentManager.fragments) //TODO
+        titles?.addAll(listOf("gggg", "jjjj")) //TODO
+
         val toolbar: Toolbar = findViewById(R.id.toolbar_main)
         setSupportActionBar(toolbar)
         supportActionBar?.title = " "
@@ -67,10 +74,10 @@ class MainActivity : AppCompatActivity() {
             }
         })
 
-        val tableLayout: TableLayout = findViewById(R.id.tab_layout)
+        val tableLayout: TabLayout = findViewById(R.id.tab_layout)
         val viewPager: ViewPager = findViewById(R.id.view_pager)
 
-        val viewPagerAdapter= ViewPagerAdapter(supportFragmentManager)
+        val viewPagerAdapter= ViewPagerAdapter(supportFragmentManager, fragments!!,titles!!)
         viewPagerAdapter.addFragment(ChatsFragment(),"Chats")
         viewPagerAdapter.addFragment(UserFragment(),"Users")
 

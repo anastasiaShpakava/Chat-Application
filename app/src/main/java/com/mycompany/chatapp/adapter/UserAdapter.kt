@@ -1,12 +1,14 @@
 package com.mycompany.chatapp.adapter
 
 import android.content.Context
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.mycompany.chatapp.MessageActivity
 import com.mycompany.chatapp.R
 import com.mycompany.chatapp.model.User
 import de.hdodenhof.circleimageview.CircleImageView
@@ -27,6 +29,11 @@ class UserAdapter(private val context: Context, private val users: List<User>) :
             holder.profileImage.setImageResource(R.mipmap.ic_launcher)
         } else {
             Glide.with(context).load(user.imageUrl).into(holder.profileImage)
+        }
+        holder.itemView.setOnClickListener {
+            var intent=Intent(context, MessageActivity::class.java)
+            intent.putExtra("userId", user.id)
+            context.startActivity(intent)
         }
     }
 
