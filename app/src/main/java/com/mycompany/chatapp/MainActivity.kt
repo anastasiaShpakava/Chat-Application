@@ -18,6 +18,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.*
 import com.mycompany.chatapp.fragments.ChatsFragment
+import com.mycompany.chatapp.fragments.ProfileFragment
 import com.mycompany.chatapp.fragments.UserFragment
 import com.mycompany.chatapp.model.User
 import de.hdodenhof.circleimageview.CircleImageView
@@ -42,9 +43,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun init() {
-
-        fragments?.add(supportFragmentManager.fragments) //TODO
-        titles?.addAll(listOf("gggg", "jjjj")) //TODO
 
         val toolbar: Toolbar = findViewById(R.id.toolbar_main)
         setSupportActionBar(toolbar)
@@ -80,6 +78,7 @@ class MainActivity : AppCompatActivity() {
         val viewPagerAdapter= ViewPagerAdapter(supportFragmentManager, fragments!!,titles!!)
         viewPagerAdapter.addFragment(ChatsFragment(),"Chats")
         viewPagerAdapter.addFragment(UserFragment(),"Users")
+        viewPagerAdapter.addFragment(ProfileFragment(),"Profile")
 
         viewPager.adapter=viewPagerAdapter
 
