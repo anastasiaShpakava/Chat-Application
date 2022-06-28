@@ -1,5 +1,6 @@
 package com.mycompany.chatapp.fragments
 
+import android.app.Activity
 import android.app.ProgressDialog
 import android.content.Intent
 import android.net.Uri
@@ -9,8 +10,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.webkit.MimeTypeMap
-import android.widget.ProgressBar
 import android.widget.TextView
+import android.widget.Toast
 import com.bumptech.glide.Glide
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
@@ -21,12 +22,18 @@ import com.google.firebase.storage.StorageTask
 import com.mycompany.chatapp.R
 import com.mycompany.chatapp.model.User
 import de.hdodenhof.circleimageview.CircleImageView
-import androidx.activity.result.ActivityResultCallback
 
-import androidx.activity.result.contract.ActivityResultContracts
-
-import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult
+import com.google.android.gms.tasks.Continuation
+import com.google.android.gms.tasks.OnCompleteListener
+import com.google.android.gms.tasks.OnFailureListener
+import com.google.android.gms.tasks.Task
+
+import com.google.firebase.storage.UploadTask
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import java.lang.Exception
+import java.util.*
 
 
 class ProfileFragment : Fragment() {
@@ -35,15 +42,16 @@ class ProfileFragment : Fragment() {
         const val IMAGE_REQUEST = 1
     }
 
-    var firebaseUser: FirebaseUser? = null
-    var databaseReference: DatabaseReference? = null
-    var storageReference: StorageReference? = null
+    private var firebaseUser: FirebaseUser? = null
+    private var databaseReference: DatabaseReference? = null
+    private var storageReference: StorageReference? = null
 
-    var username: TextView? = null
-    var imageProfile: CircleImageView? = null
+    private var username: TextView? = null
+    private var imageProfile: CircleImageView? = null
 
-    var imageUri: Uri? = null
-    var uploadTask: StorageTask? = null
+    private var imageUri: Uri? = null
+    private var uploadTask: StorageTask<*>? = null
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -81,40 +89,69 @@ class ProfileFragment : Fragment() {
         return view
     }
 
-    private fun openImage(){
-var intent= Intent()
+    private fun openImage() {
+        var intent = Intent()
         intent.setType("image/*")
         intent.action = Intent.ACTION_GET_CONTENT
         resultLauncher.launch(intent)
     }
 
-    var resultLauncher = registerForActivityResult(StartActivityForResult()) { result ->
+    private var resultLauncher = registerForActivityResult(StartActivityForResult()) { result ->
         if (result.resultCode == Activity.RESULT_OK) {
-            // There are no request codes
-            val data: Intent? = result.data
-            doSomeOperations()
+            imageUri = result.data?.data
+            if (uploadTask != null && uploadTask!!.isInProgress) {
+                Toast.makeText(context, "Upload in progress", Toast.LENGTH_SHORT).show()
+            } else {
+                uploadImage()
+            }
         }
     }
 
-    private fun getFileExtension(uri:Uri):String?{
+    private fun getFileExtension(uri: Uri): String? {
         var contentResolver = context?.contentResolver
-        var mimeTypeMap:MimeTypeMap= MimeTypeMap.getSingleton()
-        return mimeTypeMap.getExtensionFromMimeType(contentResolver.getType(uri))
+        var mimeTypeMap: MimeTypeMap = MimeTypeMap.getSingleton()
+        return mimeTypeMap.getExtensionFromMimeType(contentResolver?.getType(uri))
     }
 
-    private fun uploadImage(){
-        var progressBar:ProgressDialog =ProgressDialog(context)
+    private fun uploadImage() {
+        var progressBar: ProgressDialog = ProgressDialog(context)
         progressBar.setMessage("Uploading")
         progressBar.show()
 
-        if (imageUri!=null){
-            var fileReference:StorageReference? = storageReference?.child(System.currentTimeMillis()+
-            "." + getFileExtension(imageUri!!))
+        if (imageUri != null) {
+            val fileReference: StorageReference = storageReference!!.child(
+                System.currentTimeMillis()
+                    .toString() + "." + getFileExtension(imageUri!!)
+            )
 
-            uploadTask = fileReference?.getFile(imageUri!!)
-            uploadTask.continueWith {
+            uploadTask = fileReference.getFile(imageUri!!)
+            GlobalScope.launch {
+                fileReference.downloadUrl.addOnCompleteListener { p0 ->
+                    if (p0.isSuccessful) {
+                        var uri: Uri = p0.result
+                        var mUri: String = uri.toString()
 
+                        databaseReference = FirebaseDatabase.getInstance().getReference("Users")
+                            .child(firebaseUser!!.uid)
+
+                        val hashList = hashMapOf<String, Any>()
+                        hashList["imageUrl"] = mUri
+                        databaseReference!!.updateChildren(hashList)
+
+                        progressBar.dismiss()
+
+                    } else {
+                        Toast.makeText(context, "Failed", Toast.LENGTH_SHORT).show()
+                        progressBar.dismiss()
+                    }
+                }.addOnFailureListener { p0 ->
+                    Toast.makeText(context, p0.message, Toast.LENGTH_SHORT).show()
+                    progressBar.dismiss()
+                }
             }
+
+        } else {
+            Toast.makeText(context, "No image selected", Toast.LENGTH_SHORT).show()
         }
     }
 }

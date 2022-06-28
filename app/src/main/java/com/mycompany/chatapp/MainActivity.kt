@@ -121,7 +121,7 @@ class MainActivity : AppCompatActivity() {
             titles.add(title)
         }
 
-        override fun getPageTitle(position: Int): CharSequence? {
+        override fun getPageTitle(position: Int): CharSequence {
             return titles[position]
         }
     }
