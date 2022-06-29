@@ -114,7 +114,7 @@ class ProfileFragment : Fragment() {
     }
 
     private fun uploadImage() {
-        var progressBar: ProgressDialog = ProgressDialog(context)
+        var progressBar = ProgressDialog(context)
         progressBar.setMessage("Uploading")
         progressBar.show()
 
@@ -124,30 +124,33 @@ class ProfileFragment : Fragment() {
                     .toString() + "." + getFileExtension(imageUri!!)
             )
 
-            uploadTask = fileReference.getFile(imageUri!!)
-            GlobalScope.launch {
-                fileReference.downloadUrl.addOnCompleteListener { p0 ->
-                    if (p0.isSuccessful) {
-                        var uri: Uri = p0.result
-                        var mUri: String = uri.toString()
+            uploadTask = fileReference.putFile(imageUri!!)
+            (uploadTask as UploadTask).continueWithTask { p0 ->
+                if (!p0.isSuccessful) {
+                    throw  p0.exception!!
+                }
+                fileReference.downloadUrl
+            }.addOnCompleteListener { p0 ->
+                if (p0.isSuccessful) {
+                    var uri: Uri = p0.result
+                    var mUri: String = uri.toString()
 
-                        databaseReference = FirebaseDatabase.getInstance().getReference("Users")
-                            .child(firebaseUser!!.uid)
+                    databaseReference = FirebaseDatabase.getInstance().getReference("Users")
+                        .child(firebaseUser!!.uid)
 
-                        val hashList = hashMapOf<String, Any>()
-                        hashList["imageUrl"] = mUri
-                        databaseReference!!.updateChildren(hashList)
+                    val hashList = hashMapOf<String, Any>()
+                    hashList["imageUrl"] = mUri
+                    databaseReference!!.updateChildren(hashList)
 
-                        progressBar.dismiss()
+                    progressBar.dismiss()
 
-                    } else {
-                        Toast.makeText(context, "Failed", Toast.LENGTH_SHORT).show()
-                        progressBar.dismiss()
-                    }
-                }.addOnFailureListener { p0 ->
-                    Toast.makeText(context, p0.message, Toast.LENGTH_SHORT).show()
+                } else {
+                    Toast.makeText(context, "Failed", Toast.LENGTH_SHORT).show()
                     progressBar.dismiss()
                 }
+            }.addOnFailureListener { p0 ->
+                Toast.makeText(context, p0.message, Toast.LENGTH_SHORT).show()
+                progressBar.dismiss()
             }
 
         } else {
