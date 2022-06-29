@@ -102,6 +102,7 @@ class RegisterActivity : AppCompatActivity() {
                         hashList["username"] = userName
                         hashList["imageUrl"] = "default"
                         hashList["status"] = "offline"
+                        hashList["search"] = userName.lowercase()
 
                         reference?.setValue(hashList)?.addOnCompleteListener(this) { taskNew ->
                             if (taskNew.isSuccessful) {
