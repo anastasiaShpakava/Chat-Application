@@ -31,10 +31,6 @@ class MainActivity : AppCompatActivity() {
     private var firebaseUser: FirebaseUser? = null
     private var databaseReference: DatabaseReference? = null
 
-    private val fragments: ArrayList<Fragment>?=null
-    private val titles: ArrayList<String>?=null
-
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -75,12 +71,12 @@ class MainActivity : AppCompatActivity() {
         val tableLayout: TabLayout = findViewById(R.id.tab_layout)
         val viewPager: ViewPager = findViewById(R.id.view_pager)
 
-        val viewPagerAdapter= ViewPagerAdapter(supportFragmentManager, fragments!!,titles!!)
-        viewPagerAdapter.addFragment(ChatsFragment(),"Chats")
-        viewPagerAdapter.addFragment(UserFragment(),"Users")
-        viewPagerAdapter.addFragment(ProfileFragment(),"Profile")
+        val viewPagerAdapter = ViewPagerAdapter(supportFragmentManager)
+        viewPagerAdapter.addFragment(ChatsFragment(), "Chats")
+        viewPagerAdapter.addFragment(UserFragment(), "Users")
+        viewPagerAdapter.addFragment(ProfileFragment(), "Profile")
 
-        viewPager.adapter=viewPagerAdapter
+        viewPager.adapter = viewPagerAdapter
 
         tableLayout.setupWithViewPager(viewPager)
     }
@@ -94,29 +90,52 @@ class MainActivity : AppCompatActivity() {
         when (item.itemId) {
             R.id.logout -> {
                 FirebaseAuth.getInstance().signOut()
-                startActivity(Intent(this, StartActivity::class.java))
-                finish()
+                startActivity(
+                    Intent(
+                        this,
+                        StartActivity::class.java
+                    ).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                )
                 return true
             }
         }
         return false
     }
 
-    class ViewPagerAdapter(
-        fragmentManager: FragmentManager,
-        private val fragments: ArrayList<Fragment>,
-        private val titles: ArrayList<String>
-    ) : FragmentPagerAdapter(fragmentManager) {
+    private fun status(status: String) {
+        databaseReference =
+            FirebaseDatabase.getInstance().getReference("Users").child(firebaseUser!!.uid)
+
+        val hashList = hashMapOf<String, Any>()
+        hashList["status"] = status
+        databaseReference?.updateChildren(hashList)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        status("online")
+    }
+
+    override fun onPause() {
+        super.onPause()
+        status("offline")
+    }
+
+    class ViewPagerAdapter(supportFragmentManager: FragmentManager) :
+        FragmentPagerAdapter(supportFragmentManager) {
+
+        private val fragments: ArrayList<Fragment> = ArrayList()
+        private val titles: ArrayList<String> = ArrayList()
 
         override fun getCount(): Int {
-          return fragments.size
+            return fragments.size
         }
 
         override fun getItem(position: Int): Fragment {
-           return fragments[position]
+            return fragments[position]
         }
 
-        fun addFragment(fragment:Fragment, title:String){
+        fun addFragment(fragment: Fragment, title: String) {
             fragments.add(fragment)
             titles.add(title)
         }

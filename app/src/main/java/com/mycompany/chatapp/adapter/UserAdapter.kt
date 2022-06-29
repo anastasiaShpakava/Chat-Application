@@ -13,7 +13,11 @@ import com.mycompany.chatapp.R
 import com.mycompany.chatapp.model.User
 import de.hdodenhof.circleimageview.CircleImageView
 
-class UserAdapter(private val context: Context, private val users: List<User>) :
+class UserAdapter(
+    private val context: Context,
+    private val users: List<User>,
+    private val isChat: Boolean
+) :
     RecyclerView.Adapter<UserAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -30,19 +34,33 @@ class UserAdapter(private val context: Context, private val users: List<User>) :
         } else {
             Glide.with(context).load(user.imageUrl).into(holder.profileImage)
         }
+        if (isChat) {
+            if (user.status.equals("online")) {
+                holder.imageOn.visibility = View.VISIBLE
+                holder.imageOff.visibility = View.GONE
+            } else {
+                holder.imageOn.visibility = View.GONE
+                holder.imageOff.visibility = View.VISIBLE
+            }
+        } else {
+            holder.imageOn.visibility = View.GONE
+            holder.imageOff.visibility = View.GONE
+        }
         holder.itemView.setOnClickListener {
-            var intent=Intent(context, MessageActivity::class.java)
+            var intent = Intent(context, MessageActivity::class.java)
             intent.putExtra("userId", user.id)
             context.startActivity(intent)
         }
     }
 
     override fun getItemCount(): Int {
-        TODO("Not yet implemented")
+       return users.size
     }
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         var username: TextView = itemView.findViewById(R.id.username)
         var profileImage: CircleImageView = itemView.findViewById(R.id.profile_image)
+        var imageOn: CircleImageView = itemView.findViewById(R.id.img_on)
+        var imageOff: CircleImageView = itemView.findViewById(R.id.img_off)
     }
 }

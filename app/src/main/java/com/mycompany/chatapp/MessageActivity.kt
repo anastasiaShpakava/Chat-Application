@@ -1,6 +1,7 @@
 package com.mycompany.chatapp
 
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.EditText
@@ -55,6 +56,7 @@ class MessageActivity : AppCompatActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         toolbar.setNavigationOnClickListener {
             finish()
+          // startActivity(Intent(this, MainActivity::class.java).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP))
         }
         profileImage = findViewById(R.id.profile_image)
         userName = findViewById(R.id.user_name)
@@ -139,5 +141,23 @@ class MessageActivity : AppCompatActivity() {
 
             }
         })
+    }
+
+    private fun status(status:String){
+        databaseReference = FirebaseDatabase.getInstance().getReference("Users").child(firebaseUser!!.uid)
+
+        val hashList = hashMapOf<String, Any>()
+        hashList["status"] = status
+        databaseReference?.updateChildren(hashList)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        status("online")
+    }
+
+    override fun onPause() {
+        super.onPause()
+        status("offline")
     }
 }

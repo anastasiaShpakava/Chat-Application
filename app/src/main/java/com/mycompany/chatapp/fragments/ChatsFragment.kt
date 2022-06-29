@@ -94,7 +94,7 @@ class ChatsFragment : Fragment() {
                         }
                     }
                 }
-                userAdapter = UserAdapter(context!!, mUser!!)
+                userAdapter = UserAdapter(context!!, mUser!!, true)
                 recyclerView?.adapter = userAdapter
             }
 

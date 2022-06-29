@@ -53,7 +53,7 @@ class MessageAdapter(
     }
 
     override fun getItemCount(): Int {
-        TODO("Not yet implemented")
+        return chatList.size
     }
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {

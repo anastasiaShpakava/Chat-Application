@@ -14,13 +14,14 @@ import com.mycompany.chatapp.R
 import com.mycompany.chatapp.adapter.UserAdapter
 import com.mycompany.chatapp.model.User
 import java.util.*
+import kotlin.collections.ArrayList
 
 class UserFragment : Fragment() {
 
     private var recyclerView: RecyclerView?=null
 
     private var userAdapter:UserAdapter?=null
-    private var usersList:MutableList<User>?=null
+    private var usersList:ArrayList<User>?= ArrayList()
 
 
     override fun onCreateView(
@@ -44,13 +45,13 @@ class UserFragment : Fragment() {
         databaseReference.addValueEventListener(object : ValueEventListener{
             override fun onDataChange(dataSnapshot: DataSnapshot){
                usersList?.clear()
-                for(data in dataSnapshot.children){
+                for(data:DataSnapshot in dataSnapshot.children){
                     val user: User? =data.getValue(User::class.java)
-                    if (user?.id.equals(firebaseUser?.uid)){
+                    if (!user?.id.equals(firebaseUser?.uid)){
                         usersList?.add(user!!)
                     }
                 }
-                userAdapter = UserAdapter(context!!,usersList!!)
+                userAdapter = UserAdapter(context!!,usersList!!, false)
                 recyclerView?.adapter = userAdapter
             }
             override fun onCancelled(error: DatabaseError) {
