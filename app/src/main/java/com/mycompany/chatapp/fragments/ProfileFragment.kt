@@ -114,7 +114,7 @@ class ProfileFragment : Fragment() {
     }
 
     private fun uploadImage() {
-        var progressBar = ProgressDialog(context)
+        val progressBar = ProgressDialog(context)
         progressBar.setMessage("Uploading")
         progressBar.show()
 

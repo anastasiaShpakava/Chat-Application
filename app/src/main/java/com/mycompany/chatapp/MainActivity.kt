@@ -58,7 +58,7 @@ class MainActivity : AppCompatActivity() {
                 if (user?.imageUrl.equals("default")) {
                     userImage?.setImageResource(R.mipmap.ic_launcher)
                 } else {
-                    Glide.with(this@MainActivity).load(user?.imageUrl).into(userImage!!)
+                    Glide.with(applicationContext).load(user?.imageUrl).into(userImage!!)
                 }
             }
 

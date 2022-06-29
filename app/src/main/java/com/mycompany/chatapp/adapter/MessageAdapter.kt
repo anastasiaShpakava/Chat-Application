@@ -31,14 +31,14 @@ class MessageAdapter(
     var firebaseUser: FirebaseUser? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        if (viewType== MSG_TYPE_RIGHT){
+        if (viewType == MSG_TYPE_RIGHT) {
             val itemView = LayoutInflater.from(parent.context)
-           .inflate(R.layout.chat_item_right, parent, false)
+                .inflate(R.layout.chat_item_right, parent, false)
             return ViewHolder(itemView)
-        }else{
-                    val itemView = LayoutInflater.from(parent.context)
-            .inflate(R.layout.chat_item_left, parent, false)
-        return ViewHolder(itemView)
+        } else {
+            val itemView = LayoutInflater.from(parent.context)
+                .inflate(R.layout.chat_item_left, parent, false)
+            return ViewHolder(itemView)
         }
     }
 
@@ -50,6 +50,15 @@ class MessageAdapter(
         } else {
             Glide.with(context).load(imageUrl).into(holder.profileImage)
         }
+        if (position == chatList.size - 1) {
+            if (chatItem.isseen!!) {
+                holder.txtSeen.text = "Seen"
+            } else {
+                holder.txtSeen.text = "Delivered"
+            }
+        } else {
+            holder.txtSeen.visibility = View.GONE
+        }
     }
 
     override fun getItemCount(): Int {
@@ -59,6 +68,7 @@ class MessageAdapter(
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         var showMessage: TextView = itemView.findViewById(R.id.show_message)
         var profileImage: CircleImageView = itemView.findViewById(R.id.profile_image)
+        var txtSeen: TextView = itemView.findViewById(R.id.txt_seen)
     }
 
     override fun getItemViewType(position: Int): Int {

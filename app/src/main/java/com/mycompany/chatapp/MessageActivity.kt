@@ -22,18 +22,20 @@ import de.hdodenhof.circleimageview.CircleImageView
 
 class MessageActivity : AppCompatActivity() {
 
-    var profileImage: CircleImageView? = null
-    var userName: TextView? = null
+    private var profileImage: CircleImageView? = null
+    private var userName: TextView? = null
 
-    var firebaseUser: FirebaseUser? = null
-    var databaseReference: DatabaseReference? = null
+    private var firebaseUser: FirebaseUser? = null
+    private var databaseReference: DatabaseReference? = null
 
-    var imageSend: ImageButton? = null
-    var textSend: EditText? = null
+    private var imageSend: ImageButton? = null
+    private var textSend: EditText? = null
 
-    var messageAdapter: MessageAdapter? = null
-    var listChat: List<Chat>? = null
-    var recyclerView: RecyclerView? = null
+    private var messageAdapter: MessageAdapter? = null
+    private var listChat: List<Chat>? = null
+    private var recyclerView: RecyclerView? = null
+
+    private var seenListener:ValueEventListener?=null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -76,7 +78,7 @@ class MessageActivity : AppCompatActivity() {
                 if (user?.imageUrl.equals("default")) {
                     profileImage?.setImageResource(R.mipmap.ic_launcher)
                 } else {
-                    Glide.with(this@MessageActivity).load(user?.imageUrl).into(profileImage!!)
+                    Glide.with(applicationContext).load(user?.imageUrl).into(profileImage!!)
                 }
                 readMessages(firebaseUser?.uid!!, userId, user?.imageUrl!!)
             }
@@ -101,15 +103,37 @@ class MessageActivity : AppCompatActivity() {
             }
             textSend?.setText("")
         }
+        seenMessage(userId)
+    }
+
+    private fun seenMessage(userid:String){
+        databaseReference = FirebaseDatabase.getInstance().getReference("Chats")
+        seenListener = databaseReference?.addValueEventListener(object:ValueEventListener{
+            override fun onDataChange(snapshot: DataSnapshot) {
+                for (datasnapshot:DataSnapshot in snapshot.children){
+                    var chat:Chat?=datasnapshot.getValue(Chat::class.java)
+                    if (chat?.receiver.equals(firebaseUser?.uid)&& chat?.sender.equals(userid)){
+                        val hashList = hashMapOf<String, Any>()
+                        hashList["isseen"] = true
+                        datasnapshot.ref.updateChildren(hashList)
+                    }
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+
+            }
+
+        })
     }
 
     private fun sendMessage(sender: String, receiver: String, message: String) {
         var reference: DatabaseReference = FirebaseDatabase.getInstance().reference
-        val hashList = hashMapOf<String, String>()
-
+        val hashList = hashMapOf<String, Any>()
         hashList["sender"] = sender
         hashList["receiver"] = receiver
         hashList["message"] = message
+        hashList["isseen"] = false
 
         reference.child("Chats").push().setValue(hashList)
     }
@@ -158,6 +182,7 @@ class MessageActivity : AppCompatActivity() {
 
     override fun onPause() {
         super.onPause()
+        databaseReference?.removeEventListener(seenListener!!)
         status("offline")
     }
 }
