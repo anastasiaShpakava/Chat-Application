@@ -1,7 +1,5 @@
 package com.mycompany.chatapp
 
-
-import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.EditText
@@ -18,7 +16,11 @@ import com.google.firebase.database.*
 import com.mycompany.chatapp.adapter.MessageAdapter
 import com.mycompany.chatapp.model.Chat
 import com.mycompany.chatapp.model.User
+import com.mycompany.chatapp.notifications.*
 import de.hdodenhof.circleimageview.CircleImageView
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class MessageActivity : AppCompatActivity() {
 
@@ -28,6 +30,7 @@ class MessageActivity : AppCompatActivity() {
 
     private var firebaseUser: FirebaseUser? = null
     private var databaseReference: DatabaseReference? = null
+    private var apiService: APIService? = null
 
     private var imageSend: ImageButton? = null
     private var textSend: EditText? = null
@@ -37,6 +40,8 @@ class MessageActivity : AppCompatActivity() {
     private var recyclerView: RecyclerView? = null
 
     private var seenListener: ValueEventListener? = null
+
+    private var notify: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -61,6 +66,9 @@ class MessageActivity : AppCompatActivity() {
             finish()
             // startActivity(Intent(this, MainActivity::class.java).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP))
         }
+
+        apiService = Client.getClient("https://fcm.googleapis.com/").create(APIService::class.java)
+
         profileImage = findViewById(R.id.profile_image)
         userName = findViewById(R.id.user_name)
         imageSend = findViewById(R.id.btn_send)
@@ -91,6 +99,7 @@ class MessageActivity : AppCompatActivity() {
         })
 
         imageSend?.setOnClickListener {
+            notify = true
             val msg: String = textSend?.text.toString()
             if (msg != "") {
                 sendMessage(firebaseUser!!.uid, userId!!, msg)
@@ -155,6 +164,73 @@ class MessageActivity : AppCompatActivity() {
 
         })
 
+        var msg: String = message
+
+        databaseReference =
+            FirebaseDatabase.getInstance().getReference("Users").child(firebaseUser!!.uid)
+        databaseReference?.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                var user: User? = snapshot.getValue(User::class.java)
+                if (notify) {
+                    sendNotification(receiver, user?.username!!, msg)
+                }
+
+                notify = false
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+
+            }
+        })
+
+    }
+
+    private fun sendNotification(receiver: String, username: String, message: String) {
+        var tokens: DatabaseReference = FirebaseDatabase.getInstance().getReference("Tokens")
+        var query: Query = tokens.orderByKey().equalTo(receiver)
+
+        query.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                for (dataSnapshot: DataSnapshot in snapshot.children) {
+
+                    var token: Token? = dataSnapshot.getValue(Token::class.java)
+                    var data: Data = Data(
+                        firebaseUser?.uid, R.mipmap.ic_launcher,
+                        "$username: $message", "New message"
+                    )
+
+                    var sender = Sender(data, token?.token!!)
+
+                    apiService?.sendNotifications(sender)
+                        ?.enqueue(object : Callback<MyResponse> {
+                            override fun onResponse(
+                                call: Call<MyResponse>,
+                                response: Response<MyResponse>
+                            ) {
+                                if (response.code() == 200) {
+                                    if (response.body()?.success != 1) {
+                                        Toast.makeText(
+                                            this@MessageActivity,
+                                            "Failed",
+                                            Toast.LENGTH_SHORT
+                                        ).show()
+                                    }
+                                }
+                            }
+
+                            override fun onFailure(call: Call<MyResponse>, t: Throwable) {
+
+                            }
+
+                        })
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+
+            }
+
+        })
     }
 
     private fun readMessages(myid: String, userid: String, imageUrl: String) {

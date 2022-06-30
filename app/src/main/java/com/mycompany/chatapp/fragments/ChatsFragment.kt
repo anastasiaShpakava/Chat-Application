@@ -7,15 +7,16 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.*
+import com.google.firebase.iid.FirebaseInstanceId
 import com.mycompany.chatapp.R
 import com.mycompany.chatapp.adapter.UserAdapter
 import com.mycompany.chatapp.model.Chat
 import com.mycompany.chatapp.model.ChatList
 import com.mycompany.chatapp.model.User
+import com.mycompany.chatapp.notifications.Token
 
 class ChatsFragment : Fragment() {
 
@@ -61,7 +62,16 @@ class ChatsFragment : Fragment() {
 
             }
         })
+
+        updateToken(FirebaseInstanceId.getInstance().getToken())
+
         return view
+    }
+
+    private fun updateToken(token:String?){
+        var databaseReference:DatabaseReference = FirebaseDatabase.getInstance().getReference("Tokens")
+        var newToken:Token = Token(token)
+        databaseReference.child(firebaseUser!!.uid).setValue(newToken)
     }
 
     private fun  chatList(){
@@ -87,7 +97,6 @@ class ChatsFragment : Fragment() {
             override fun onCancelled(error: DatabaseError) {
 
             }
-
         })
     }
 }
