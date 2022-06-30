@@ -8,10 +8,15 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.database.*
 import com.mycompany.chatapp.MessageActivity
 import com.mycompany.chatapp.R
+import com.mycompany.chatapp.model.Chat
 import com.mycompany.chatapp.model.User
 import de.hdodenhof.circleimageview.CircleImageView
+import org.w3c.dom.Text
 
 class UserAdapter(
     private val context: Context,
@@ -19,6 +24,8 @@ class UserAdapter(
     private val isChat: Boolean
 ) :
     RecyclerView.Adapter<UserAdapter.ViewHolder>() {
+
+    var lastMessage: String? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val itemView = LayoutInflater.from(parent.context)
@@ -34,6 +41,12 @@ class UserAdapter(
         } else {
             Glide.with(context).load(user.imageUrl).into(holder.profileImage)
         }
+        if (isChat) {
+            lastMessage(user.id!!, holder.lastMsg)
+        } else {
+            holder.lastMsg.visibility = View.GONE
+        }
+
         if (isChat) {
             if (user.status.equals("online")) {
                 holder.imageOn.visibility = View.VISIBLE
@@ -54,7 +67,7 @@ class UserAdapter(
     }
 
     override fun getItemCount(): Int {
-       return users.size
+        return users.size
     }
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -62,5 +75,37 @@ class UserAdapter(
         var profileImage: CircleImageView = itemView.findViewById(R.id.profile_image)
         var imageOn: CircleImageView = itemView.findViewById(R.id.img_on)
         var imageOff: CircleImageView = itemView.findViewById(R.id.img_off)
+        var lastMsg: TextView = itemView.findViewById(R.id.last_msg)
+    }
+
+    private fun lastMessage(userId: String, lastMsg: TextView) {
+        lastMessage = "default"
+        var firebaseUser: FirebaseUser? = FirebaseAuth.getInstance().currentUser
+        var databaseReference: DatabaseReference =
+            FirebaseDatabase.getInstance().getReference("Chats")
+
+        databaseReference.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                for (dataSnapshot: DataSnapshot in snapshot.children) {
+                    var chat: Chat? = dataSnapshot.getValue(Chat::class.java)
+                    if (chat?.receiver.equals(userId) && chat?.sender.equals(firebaseUser?.uid)) {
+                        lastMessage = chat?.message
+                    }
+                }
+                when (lastMessage) {
+                    "default" -> lastMsg.text = "No message"
+
+                    else -> lastMsg.text = lastMessage
+                }
+
+                lastMessage = "default"
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+
+            }
+
+        })
+
     }
 }

@@ -24,6 +24,7 @@ class MessageActivity : AppCompatActivity() {
 
     private var profileImage: CircleImageView? = null
     private var userName: TextView? = null
+    var userId: String? = null
 
     private var firebaseUser: FirebaseUser? = null
     private var databaseReference: DatabaseReference? = null
@@ -35,7 +36,7 @@ class MessageActivity : AppCompatActivity() {
     private var listChat: List<Chat>? = null
     private var recyclerView: RecyclerView? = null
 
-    private var seenListener:ValueEventListener?=null
+    private var seenListener: ValueEventListener? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -58,14 +59,14 @@ class MessageActivity : AppCompatActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         toolbar.setNavigationOnClickListener {
             finish()
-          // startActivity(Intent(this, MainActivity::class.java).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP))
+            // startActivity(Intent(this, MainActivity::class.java).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP))
         }
         profileImage = findViewById(R.id.profile_image)
         userName = findViewById(R.id.user_name)
         imageSend = findViewById(R.id.btn_send)
         textSend = findViewById(R.id.text_send)
 
-        var userId: String? = intent.getStringExtra("userId")
+        userId = intent.getStringExtra("userId")
 
         firebaseUser = FirebaseAuth.getInstance().currentUser
         databaseReference = FirebaseDatabase.getInstance().getReference("Users").child(userId!!)
@@ -80,7 +81,7 @@ class MessageActivity : AppCompatActivity() {
                 } else {
                     Glide.with(applicationContext).load(user?.imageUrl).into(profileImage!!)
                 }
-                readMessages(firebaseUser?.uid!!, userId, user?.imageUrl!!)
+                readMessages(firebaseUser?.uid!!, userId!!, user?.imageUrl!!)
             }
 
             override fun onCancelled(error: DatabaseError) {
@@ -92,7 +93,7 @@ class MessageActivity : AppCompatActivity() {
         imageSend?.setOnClickListener {
             val msg: String = textSend?.text.toString()
             if (msg != "") {
-                sendMessage(firebaseUser!!.uid, userId, msg)
+                sendMessage(firebaseUser!!.uid, userId!!, msg)
             } else {
                 Toast.makeText(
                     this@MessageActivity,
@@ -103,16 +104,16 @@ class MessageActivity : AppCompatActivity() {
             }
             textSend?.setText("")
         }
-        seenMessage(userId)
+        seenMessage(userId!!)
     }
 
-    private fun seenMessage(userid:String){
+    private fun seenMessage(userid: String) {
         databaseReference = FirebaseDatabase.getInstance().getReference("Chats")
-        seenListener = databaseReference?.addValueEventListener(object:ValueEventListener{
+        seenListener = databaseReference?.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
-                for (datasnapshot:DataSnapshot in snapshot.children){
-                    var chat:Chat?=datasnapshot.getValue(Chat::class.java)
-                    if (chat?.receiver.equals(firebaseUser?.uid)&& chat?.sender.equals(userid)){
+                for (datasnapshot: DataSnapshot in snapshot.children) {
+                    var chat: Chat? = datasnapshot.getValue(Chat::class.java)
+                    if (chat?.receiver.equals(firebaseUser?.uid) && chat?.sender.equals(userid)) {
                         val hashList = hashMapOf<String, Any>()
                         hashList["isseen"] = true
                         datasnapshot.ref.updateChildren(hashList)
@@ -123,7 +124,6 @@ class MessageActivity : AppCompatActivity() {
             override fun onCancelled(error: DatabaseError) {
 
             }
-
         })
     }
 
@@ -136,6 +136,25 @@ class MessageActivity : AppCompatActivity() {
         hashList["isseen"] = false
 
         reference.child("Chats").push().setValue(hashList)
+
+        //add user to chat fragment
+        val chatRef: DatabaseReference = FirebaseDatabase.getInstance().getReference("Chatlist")
+            .child(firebaseUser!!.uid)
+            .child(userId!!)
+
+        chatRef.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                if (!snapshot.exists()) {
+                    chatRef.child("id").setValue(userId)
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+
+            }
+
+        })
+
     }
 
     private fun readMessages(myid: String, userid: String, imageUrl: String) {
@@ -167,8 +186,9 @@ class MessageActivity : AppCompatActivity() {
         })
     }
 
-    private fun status(status:String){
-        databaseReference = FirebaseDatabase.getInstance().getReference("Users").child(firebaseUser!!.uid)
+    private fun status(status: String) {
+        databaseReference =
+            FirebaseDatabase.getInstance().getReference("Users").child(firebaseUser!!.uid)
 
         val hashList = hashMapOf<String, Any>()
         hashList["status"] = status

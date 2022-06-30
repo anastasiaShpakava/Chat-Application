@@ -14,6 +14,7 @@ import com.google.firebase.database.*
 import com.mycompany.chatapp.R
 import com.mycompany.chatapp.adapter.UserAdapter
 import com.mycompany.chatapp.model.Chat
+import com.mycompany.chatapp.model.ChatList
 import com.mycompany.chatapp.model.User
 
 class ChatsFragment : Fragment() {
@@ -24,8 +25,9 @@ class ChatsFragment : Fragment() {
     private var firebaseUser: FirebaseUser? = null
     private var databaseReference: DatabaseReference? = null
 
-    private var userList: List<String>? = null
+    private var userList: List<ChatList>? = null
     private var mUser: List<User>? = null
+    private var chatList: List<Chat>? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -38,24 +40,20 @@ class ChatsFragment : Fragment() {
         recyclerView?.layoutManager = LinearLayoutManager(context)
 
         firebaseUser = FirebaseAuth.getInstance().currentUser
-        databaseReference = FirebaseDatabase.getInstance().getReference("Chats")
 
         userList = ArrayList()
 
+        databaseReference = FirebaseDatabase.getInstance().getReference("Chatlist").child(firebaseUser!!.uid)
         databaseReference?.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
-                (userList as ArrayList<String>).clear()
+                (userList as ArrayList<ChatList>).clear()
 
                 for (snapShop: DataSnapshot in dataSnapshot.children) {
-                    var chat = snapShop.getValue(Chat::class.java)
-                    if (chat?.sender.equals(firebaseUser?.uid)) {
-                        (userList as ArrayList<String>).add(chat?.receiver!!)
-                    }
-                    if (chat?.receiver.equals(firebaseUser?.uid)) {
-                        (userList as ArrayList<String>).add(chat?.sender!!)
-                    }
+                    var chatList = snapShop.getValue(ChatList::class.java)
+                    (userList as ArrayList<ChatList>).add(chatList!!)
+
                 }
-                readChats()
+               chatList()
             }
 
             override fun onCancelled(error: DatabaseError) {
@@ -66,42 +64,30 @@ class ChatsFragment : Fragment() {
         return view
     }
 
-    private fun readChats() {
+    private fun  chatList(){
         mUser = ArrayList()
 
         databaseReference = FirebaseDatabase.getInstance().getReference("Users")
-
-        databaseReference?.addValueEventListener(object : ValueEventListener {
-            override fun onDataChange(dataSnapshot: DataSnapshot) {
+        databaseReference?.addValueEventListener(object :ValueEventListener{
+            override fun onDataChange(snapshot: DataSnapshot) {
                 (mUser as ArrayList<User>).clear()
 
-                for (snapShop: DataSnapshot in dataSnapshot.children) {
-
-                    var user: User? = snapShop.getValue(User::class.java)
-
-                    //display 1 user from chat
-                    for (id: String in userList!!) {
-                        if (user?.id.equals(id)) {
-                            if ((mUser as ArrayList<User>).isNotEmpty()) {
-                                for (curUser: User in mUser as ArrayList<User>) {
-                                    if (!user?.id.equals(curUser.id)) {
-                                        (mUser as ArrayList<User>).add(user!!)
-                                    }
-                                }
-                            } else {
-                                (mUser as ArrayList<User>).add(user!!)
-                            }
+                for (datasnapshot:DataSnapshot in snapshot.children){
+                    var user:User?=datasnapshot.getValue(User::class.java)
+                    for (chatlist:ChatList in userList!!){
+                        if (user?.id.equals(chatlist.id)){
+                            (mUser as ArrayList<User>).add(user!!)
                         }
                     }
                 }
-                userAdapter = UserAdapter(context!!, mUser!!, true)
+                userAdapter = UserAdapter(context!!, mUser!!,true)
                 recyclerView?.adapter = userAdapter
             }
 
             override fun onCancelled(error: DatabaseError) {
-                // Failed to read value
 
             }
+
         })
     }
 }
