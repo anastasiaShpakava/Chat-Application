@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.widget.Toolbar
 import com.google.firebase.auth.FirebaseAuth
@@ -14,12 +15,12 @@ class LoginActivity : AppCompatActivity() {
     private var email: EditText? = null
     private var password: EditText? = null
     private var buttonRegister: Button? = null
+    var forgotPassword:TextView? = null
 
     var txtEmail: String? = null
     var txtPassword: String? = null
 
     private var auth: FirebaseAuth? = null
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,7 +32,12 @@ class LoginActivity : AppCompatActivity() {
     private fun init() {
         email = findViewById(R.id.edit_text_email)
         password = findViewById(R.id.edit_text_password)
-        buttonRegister = findViewById(R.id.button_register)
+        buttonRegister = findViewById(R.id.button_login)
+        forgotPassword = findViewById(R.id.forgot_password)
+
+        forgotPassword?.setOnClickListener {
+           startActivity(Intent(this, ResetPasswordActivity::class.java))
+        }
 
         val toolbar: Toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)

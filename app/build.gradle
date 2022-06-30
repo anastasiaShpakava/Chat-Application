@@ -50,6 +50,8 @@ dependencies {
     implementation 'com.google.firebase:firebase-storage:20.0.1'
     implementation 'com.google.firebase:firebase-functions:20.1.0'
 
+    implementation 'com.rengwuxian.materialedittext:library:2.1.4'
+
     implementation 'androidx.navigation:navigation-ui-ktx:2.4.2'
 
     implementation 'de.hdodenhof:circleimageview:3.1.0'

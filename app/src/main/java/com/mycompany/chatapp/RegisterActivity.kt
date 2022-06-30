@@ -51,39 +51,9 @@ class RegisterActivity : AppCompatActivity() {
             txtEmail = email?.text.toString()
             txtPassword = password?.text.toString()
 
-            if (validate()) {
-                register(txtUsername!!, txtPassword!!, txtEmail!!)
-            }
+            register(txtUsername!!, txtPassword!!, txtEmail!!)
+
         }
-    }
-
-    private fun validate(): Boolean {
-        var valid = true
-
-        if (txtUsername?.isEmpty() == true || txtUsername?.length!! < 3) {
-            username?.error = "at least 3 characters"
-            valid = false
-        } else {
-            username?.error = null
-        }
-
-        if (txtPassword?.isEmpty() == true || txtPassword?.length!! < 4
-            || txtPassword?.length!! > 10
-        ) {
-            password?.error = "between 4 and 10 alphanumeric characters"
-            valid = false
-        } else {
-            password?.error = null
-        }
-
-        if (txtEmail?.isEmpty() == true) {
-            email?.error = "enter a valid email address"
-            valid = false
-        } else {
-            email?.error = null
-        }
-
-        return valid
     }
 
     private fun register(userName: String, password: String, email: String) {
