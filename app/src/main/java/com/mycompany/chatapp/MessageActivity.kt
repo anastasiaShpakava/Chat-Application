@@ -6,7 +6,9 @@ import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.widget.Toolbar
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -21,6 +23,8 @@ import de.hdodenhof.circleimageview.CircleImageView
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import android.Manifest
+import android.content.pm.PackageManager
 
 class MessageActivity : AppCompatActivity() {
 
@@ -194,12 +198,12 @@ class MessageActivity : AppCompatActivity() {
                 for (dataSnapshot: DataSnapshot in snapshot.children) {
 
                     var token: Token? = dataSnapshot.getValue(Token::class.java)
-                    var data: Data = Data(
+                    var data = Data(
                         firebaseUser?.uid, R.mipmap.ic_launcher,
-                        "$username: $message", "New message"
+                        "$username: $message", "New message", userId
                     )
 
-                    var sender = Sender(data, token?.token!!)
+                    var sender = Sender(data, token?.token!!, true,1)
 
                     apiService?.sendNotifications(sender)
                         ?.enqueue(object : Callback<MyResponse> {

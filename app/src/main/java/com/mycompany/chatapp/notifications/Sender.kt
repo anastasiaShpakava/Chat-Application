@@ -1,5 +1,9 @@
 package com.mycompany.chatapp.notifications
 
-class Sender(data:Data, to:String) {
+data class Sender(
+    val data: Data? = null,
+    val to: String? = null,
+    val content_available:Boolean,
+    val priority: Int? = null
+)
 
-}

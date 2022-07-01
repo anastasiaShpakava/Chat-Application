@@ -70,7 +70,7 @@ class ChatsFragment : Fragment() {
 
     private fun updateToken(token:String?){
         var databaseReference:DatabaseReference = FirebaseDatabase.getInstance().getReference("Tokens")
-        var newToken:Token = Token(token)
+        var newToken = Token(token)
         databaseReference.child(firebaseUser!!.uid).setValue(newToken)
     }
 

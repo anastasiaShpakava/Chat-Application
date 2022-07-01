@@ -7,6 +7,7 @@ import android.content.Intent
 import android.media.RingtoneManager
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import androidx.core.app.NotificationCompat
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
@@ -22,11 +23,17 @@ class MyFirebaseMessaging : FirebaseMessagingService() {
         var sented: String? = message.data["sented"]
 
         var firebaseUser: FirebaseUser? = FirebaseAuth.getInstance().currentUser
+        var s = firebaseUser?.uid
+        Log.d("fff",s!!)
 
         if (firebaseUser != null && sented.equals(firebaseUser.uid)) {
             sendNotification(message)
         }
 
+    }
+
+    override fun onNewToken(token: String) {
+        super.onNewToken(token)
     }
 
     private fun sendNotification(remoteMessage: RemoteMessage) {
@@ -35,22 +42,20 @@ class MyFirebaseMessaging : FirebaseMessagingService() {
         var title: String? = remoteMessage.data["title"]
         var body: String? = remoteMessage.data["body"]
 
-        var notification: RemoteMessage.Notification? = remoteMessage.notification
-
-        var j: Int = Integer.parseInt(user?.replace("[\\D]", ""))
-        var intent: Intent = Intent(this, MessageActivity::class.java)
-        var bundle: Bundle = Bundle()
+        val j: Int = user?.replace("[\\D]".toRegex(), "")!!.toInt()
+        var intent  = Intent(this, MessageActivity::class.java)
+        var bundle = Bundle()
         bundle.putString("userid", user)
         intent.putExtras(bundle)
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
         var pendingIntent: PendingIntent =
-            PendingIntent.getActivity(this, j, intent, PendingIntent.FLAG_ONE_SHOT)
+            PendingIntent.getActivity(this, j, intent, PendingIntent.FLAG_MUTABLE)
 
         var defaultSound: Uri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
         var builder: NotificationCompat.Builder = NotificationCompat.Builder(this)
             .setSmallIcon(Integer.parseInt(icon))
-            .setContentTitle(notification?.title)
-            .setContentText(notification?.body)
+            .setContentTitle(title)
+            .setContentText(body)
             .setAutoCancel(true)
             .setSound(defaultSound)
             .setContentIntent(pendingIntent)

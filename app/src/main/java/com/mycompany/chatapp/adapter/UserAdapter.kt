@@ -61,7 +61,7 @@ class UserAdapter(
         }
         holder.itemView.setOnClickListener {
             var intent = Intent(context, MessageActivity::class.java)
-            intent.putExtra("userId", user.id)
+            intent.putExtra("userid", user.id)
             context.startActivity(intent)
         }
     }

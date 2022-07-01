@@ -5,6 +5,7 @@ plugins {
 }
 
 android {
+    buildToolsVersion '32.0.0'
     compileSdk 31
 
     defaultConfig {
@@ -50,6 +51,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-storage:20.0.1'
     implementation 'com.google.firebase:firebase-functions:20.1.0'
     implementation 'com.google.firebase:firebase-messaging:23.0.6'
+    implementation 'com.google.firebase:firebase-analytics:15.0.0'
 
     implementation 'com.rengwuxian.materialedittext:library:2.1.4'
 
