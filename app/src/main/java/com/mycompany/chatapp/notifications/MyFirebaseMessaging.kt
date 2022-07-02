@@ -23,8 +23,6 @@ class MyFirebaseMessaging : FirebaseMessagingService() {
         var sented: String? = message.data["sented"]
 
         var firebaseUser: FirebaseUser? = FirebaseAuth.getInstance().currentUser
-        var s = firebaseUser?.uid
-        Log.d("fff",s!!)
 
         if (firebaseUser != null && sented.equals(firebaseUser.uid)) {
             sendNotification(message)
@@ -37,22 +35,22 @@ class MyFirebaseMessaging : FirebaseMessagingService() {
     }
 
     private fun sendNotification(remoteMessage: RemoteMessage) {
-        var user: String? = remoteMessage.data["user"]
-        var icon: String? = remoteMessage.data["icon"]
-        var title: String? = remoteMessage.data["title"]
-        var body: String? = remoteMessage.data["body"]
+        val user: String? = remoteMessage.data["user"]
+        val icon: String = remoteMessage.data["icon"]!!
+        val title: String? = remoteMessage.data["title"]
+        val body: String? = remoteMessage.data["body"]
 
         val j: Int = user?.replace("[\\D]".toRegex(), "")!!.toInt()
-        var intent  = Intent(this, MessageActivity::class.java)
-        var bundle = Bundle()
+        val intent  = Intent(this, MessageActivity::class.java)
+        val bundle = Bundle()
         bundle.putString("userid", user)
         intent.putExtras(bundle)
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-        var pendingIntent: PendingIntent =
-            PendingIntent.getActivity(this, j, intent, PendingIntent.FLAG_MUTABLE)
+        val pendingIntent: PendingIntent =
+            PendingIntent.getActivity(this, j, intent, PendingIntent.FLAG_IMMUTABLE)
 
-        var defaultSound: Uri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
-        var builder: NotificationCompat.Builder = NotificationCompat.Builder(this)
+        val defaultSound: Uri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
+        val builder: NotificationCompat.Builder = NotificationCompat.Builder(this)
             .setSmallIcon(Integer.parseInt(icon))
             .setContentTitle(title)
             .setContentText(body)
@@ -60,7 +58,7 @@ class MyFirebaseMessaging : FirebaseMessagingService() {
             .setSound(defaultSound)
             .setContentIntent(pendingIntent)
 
-        var newNotification: NotificationManager =
+        val newNotification: NotificationManager =
             getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
         var i = 0

@@ -62,13 +62,13 @@ class RegisterActivity : AppCompatActivity() {
                 if (task.isSuccessful) {
                     val user = auth?.currentUser
                     if (user != null) {
-                        val userId = user.uid
+                        val userid = user.uid
                         reference =
-                            FirebaseDatabase.getInstance().getReference("Users").child(userId)
+                            FirebaseDatabase.getInstance().getReference("Users").child(userid)
 
                         val hashList = hashMapOf<String, String>()
 
-                        hashList["id"] = userId
+                        hashList["id"] = userid
                         hashList["username"] = userName
                         hashList["imageUrl"] = "default"
                         hashList["status"] = "offline"

@@ -30,7 +30,7 @@ class MessageActivity : AppCompatActivity() {
 
     private var profileImage: CircleImageView? = null
     private var userName: TextView? = null
-    var userId: String? = null
+    var userid: String? = null
 
     private var firebaseUser: FirebaseUser? = null
     private var databaseReference: DatabaseReference? = null
@@ -78,10 +78,10 @@ class MessageActivity : AppCompatActivity() {
         imageSend = findViewById(R.id.btn_send)
         textSend = findViewById(R.id.text_send)
 
-        userId = intent.getStringExtra("userId")
+        userid = intent.getStringExtra("userid")
 
         firebaseUser = FirebaseAuth.getInstance().currentUser
-        databaseReference = FirebaseDatabase.getInstance().getReference("Users").child(userId!!)
+        databaseReference = FirebaseDatabase.getInstance().getReference("Users").child(userid!!)
 
 
         databaseReference?.addValueEventListener(object : ValueEventListener {
@@ -93,7 +93,7 @@ class MessageActivity : AppCompatActivity() {
                 } else {
                     Glide.with(applicationContext).load(user?.imageUrl).into(profileImage!!)
                 }
-                readMessages(firebaseUser?.uid!!, userId!!, user?.imageUrl!!)
+                readMessages(firebaseUser?.uid!!, userid!!, user?.imageUrl!!)
             }
 
             override fun onCancelled(error: DatabaseError) {
@@ -106,7 +106,7 @@ class MessageActivity : AppCompatActivity() {
             notify = true
             val msg: String = textSend?.text.toString()
             if (msg != "") {
-                sendMessage(firebaseUser!!.uid, userId!!, msg)
+                sendMessage(firebaseUser!!.uid, userid!!, msg)
             } else {
                 Toast.makeText(
                     this@MessageActivity,
@@ -117,7 +117,7 @@ class MessageActivity : AppCompatActivity() {
             }
             textSend?.setText("")
         }
-        seenMessage(userId!!)
+        seenMessage(userid!!)
     }
 
     private fun seenMessage(userid: String) {
@@ -153,12 +153,12 @@ class MessageActivity : AppCompatActivity() {
         //add user to chat fragment
         val chatRef: DatabaseReference = FirebaseDatabase.getInstance().getReference("Chatlist")
             .child(firebaseUser!!.uid)
-            .child(userId!!)
+            .child(userid!!)
 
         chatRef.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 if (!snapshot.exists()) {
-                    chatRef.child("id").setValue(userId)
+                    chatRef.child("id").setValue(userid)
                 }
             }
 
@@ -200,7 +200,7 @@ class MessageActivity : AppCompatActivity() {
                     var token: Token? = dataSnapshot.getValue(Token::class.java)
                     var data = Data(
                         firebaseUser?.uid, R.mipmap.ic_launcher,
-                        "$username: $message", "New message", userId
+                        "$username: $message", "New message", userid
                     )
 
                     var sender = Sender(data, token?.token!!, true,1)

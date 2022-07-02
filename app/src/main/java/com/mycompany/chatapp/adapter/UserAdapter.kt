@@ -78,7 +78,7 @@ class UserAdapter(
         var lastMsg: TextView = itemView.findViewById(R.id.last_msg)
     }
 
-    private fun lastMessage(userId: String, lastMsg: TextView) {
+    private fun lastMessage(userid: String, lastMsg: TextView) {
         lastMessage = "default"
         var firebaseUser: FirebaseUser? = FirebaseAuth.getInstance().currentUser
         var databaseReference: DatabaseReference =
@@ -88,7 +88,7 @@ class UserAdapter(
             override fun onDataChange(snapshot: DataSnapshot) {
                 for (dataSnapshot: DataSnapshot in snapshot.children) {
                     var chat: Chat? = dataSnapshot.getValue(Chat::class.java)
-                    if (chat?.receiver.equals(userId) && chat?.sender.equals(firebaseUser?.uid)) {
+                    if (chat?.receiver.equals(userid) && chat?.sender.equals(firebaseUser?.uid)) {
                         lastMessage = chat?.message
                     }
                 }
