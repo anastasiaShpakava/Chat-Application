@@ -1,11 +1,13 @@
 package com.mycompany.chatapp.notifications
 
+import android.app.Notification
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.media.RingtoneManager
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import androidx.core.app.NotificationCompat
@@ -25,13 +27,53 @@ class MyFirebaseMessaging : FirebaseMessagingService() {
         var firebaseUser: FirebaseUser? = FirebaseAuth.getInstance().currentUser
 
         if (firebaseUser != null && sented.equals(firebaseUser.uid)) {
-            sendNotification(message)
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                sendOreoNotification(message)
+            } else {
+                sendNotification(message)
+            }
+
         }
 
     }
 
     override fun onNewToken(token: String) {
         super.onNewToken(token)
+    }
+
+    private fun sendOreoNotification(remoteMessage: RemoteMessage) {
+        val user: String? = remoteMessage.data["user"]
+        val icon: String = remoteMessage.data["icon"]!!
+        val title: String? = remoteMessage.data["title"]
+        val body: String? = remoteMessage.data["body"]
+
+        val j: Int = user?.replace("[\\D]".toRegex(), "")!!.toInt()
+        val intent = Intent(this, MessageActivity::class.java)
+        val bundle = Bundle()
+        bundle.putString("userid", user)
+        intent.putExtras(bundle)
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+        val pendingIntent: PendingIntent =
+            PendingIntent.getActivity(this, j, intent, PendingIntent.FLAG_IMMUTABLE)
+
+        val defaultSound: Uri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
+
+        var myNotificationManager = MyNotificationManager(this)
+        var builder: Notification.Builder = myNotificationManager.getMyNotification(
+            title!!,
+            body!!,
+            pendingIntent,
+            defaultSound,
+            icon
+        )
+
+        var i = 0
+        if (j > 0) {
+            i = j
+        }
+        myNotificationManager.getManager().notify(i, builder.build())
+
     }
 
     private fun sendNotification(remoteMessage: RemoteMessage) {
@@ -41,7 +83,7 @@ class MyFirebaseMessaging : FirebaseMessagingService() {
         val body: String? = remoteMessage.data["body"]
 
         val j: Int = user?.replace("[\\D]".toRegex(), "")!!.toInt()
-        val intent  = Intent(this, MessageActivity::class.java)
+        val intent = Intent(this, MessageActivity::class.java)
         val bundle = Bundle()
         bundle.putString("userid", user)
         intent.putExtras(bundle)
