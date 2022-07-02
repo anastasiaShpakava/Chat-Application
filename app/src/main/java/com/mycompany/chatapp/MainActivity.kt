@@ -20,7 +20,9 @@ import com.google.firebase.database.*
 import com.mycompany.chatapp.fragments.ChatsFragment
 import com.mycompany.chatapp.fragments.ProfileFragment
 import com.mycompany.chatapp.fragments.UserFragment
+import com.mycompany.chatapp.model.Chat
 import com.mycompany.chatapp.model.User
+import com.mycompany.chatapp.notifications.Data
 import de.hdodenhof.circleimageview.CircleImageView
 
 class MainActivity : AppCompatActivity() {
@@ -71,14 +73,36 @@ class MainActivity : AppCompatActivity() {
         val tableLayout: TabLayout = findViewById(R.id.tab_layout)
         val viewPager: ViewPager = findViewById(R.id.view_pager)
 
-        val viewPagerAdapter = ViewPagerAdapter(supportFragmentManager)
-        viewPagerAdapter.addFragment(ChatsFragment(), "Chats")
-        viewPagerAdapter.addFragment(UserFragment(), "Users")
-        viewPagerAdapter.addFragment(ProfileFragment(), "Profile")
+        databaseReference = FirebaseDatabase.getInstance().getReference("Chats")
+        databaseReference?.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                val viewPagerAdapter = ViewPagerAdapter(supportFragmentManager)
+                var unread: Int = 0
+                for (snapshot: DataSnapshot in dataSnapshot.children) {
+                    var chat: Chat? = snapshot.getValue(Chat::class.java)
+                    if (chat?.receiver.equals(firebaseUser?.uid) && chat?.isseen == false) {
+                        unread++
+                    }
+                }
+                if (unread == 0) {
+                    viewPagerAdapter.addFragment(ChatsFragment(), "Chats")
+                } else {
+                    viewPagerAdapter.addFragment(ChatsFragment(), "($unread) Chats")
+                }
+                viewPagerAdapter.addFragment(UserFragment(), "Users")
+                viewPagerAdapter.addFragment(ProfileFragment(), "Profile")
 
-        viewPager.adapter = viewPagerAdapter
+                viewPager.adapter = viewPagerAdapter
 
-        tableLayout.setupWithViewPager(viewPager)
+                tableLayout.setupWithViewPager(viewPager)
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                // Failed to read value
+
+            }
+        })
+
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {

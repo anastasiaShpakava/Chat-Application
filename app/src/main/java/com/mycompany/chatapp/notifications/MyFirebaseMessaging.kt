@@ -5,6 +5,7 @@ import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.media.RingtoneManager
 import android.net.Uri
 import android.os.Build
@@ -23,19 +24,23 @@ class MyFirebaseMessaging : FirebaseMessagingService() {
         super.onMessageReceived(message)
 
         var sented: String? = message.data["sented"]
+        var user: String? = message.data["user"]
+
+        var preferences: SharedPreferences = getSharedPreferences("PREFS", MODE_PRIVATE)
+        var currentUser: String? = preferences.getString("currentuser", "none")
 
         var firebaseUser: FirebaseUser? = FirebaseAuth.getInstance().currentUser
 
         if (firebaseUser != null && sented.equals(firebaseUser.uid)) {
+            if (!currentUser.equals(user)) {
 
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                sendOreoNotification(message)
-            } else {
-                sendNotification(message)
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    sendOreoNotification(message)
+                } else {
+                    sendNotification(message)
+                }
             }
-
         }
-
     }
 
     override fun onNewToken(token: String) {

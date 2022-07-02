@@ -24,6 +24,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import android.Manifest
+import android.content.SharedPreferences
 import android.content.pm.PackageManager
 
 class MessageActivity : AppCompatActivity() {
@@ -189,6 +190,12 @@ class MessageActivity : AppCompatActivity() {
 
     }
 
+    private fun currentUser(userid:String){
+        var editor: SharedPreferences.Editor? = getSharedPreferences("PREFS", MODE_PRIVATE).edit()
+        editor?.putString("currentuser", userid)
+        editor?.apply()
+    }
+
     private fun sendNotification(receiver: String, username: String, message: String) {
         var tokens: DatabaseReference = FirebaseDatabase.getInstance().getReference("Tokens")
         var query: Query = tokens.orderByKey().equalTo(receiver)
@@ -278,11 +285,13 @@ class MessageActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         status("online")
+        currentUser(userid!!)
     }
 
     override fun onPause() {
         super.onPause()
         databaseReference?.removeEventListener(seenListener!!)
         status("offline")
+        currentUser("none")
     }
 }
