@@ -12,4 +12,6 @@
     <dimen name="size_90dp">90dp</dimen>
     <dimen name="size_5dp">5dp</dimen>
     <dimen name="size_8dp">8dp</dimen>
+    <dimen name="size_300dp">300dp</dimen>
+    <dimen name="size_40dp">40dp</dimen>
 </resources>

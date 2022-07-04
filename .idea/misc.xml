@@ -4,6 +4,9 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/Users/Anastasia/AndroidStudioProjects/ChatApp/Chat-Application/app/src/main/res/drawable/background_button.xml" value="0.13072916666666667" />
+        <entry key="..\:/Users/Anastasia/AndroidStudioProjects/ChatApp/Chat-Application/app/src/main/res/drawable/background_left.xml" value="0.17083333333333334" />
+        <entry key="..\:/Users/Anastasia/AndroidStudioProjects/ChatApp/Chat-Application/app/src/main/res/drawable/background_message.xml" value="0.17083333333333334" />
+        <entry key="..\:/Users/Anastasia/AndroidStudioProjects/ChatApp/Chat-Application/app/src/main/res/drawable/background_message_left.xml" value="0.17083333333333334" />
         <entry key="..\:/Users/Anastasia/AndroidStudioProjects/ChatApp/Chat-Application/app/src/main/res/drawable/ic_app_main.xml" value="0.18645833333333334" />
         <entry key="..\:/Users/Anastasia/AndroidStudioProjects/ChatApp/Chat-Application/app/src/main/res/drawable/toolbar_background.xml" value="0.13072916666666667" />
         <entry key="..\:/Users/Anastasia/AndroidStudioProjects/ChatApp/Chat-Application/app/src/main/res/layout/activity_login.xml" value="0.1" />

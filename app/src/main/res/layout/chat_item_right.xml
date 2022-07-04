@@ -2,10 +2,10 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="8dp">
+    android:padding="@dimen/size_8dp">
 
     <RelativeLayout
-        android:layout_width="300dp"
+        android:layout_width="@dimen/size_300dp"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"/>
@@ -20,12 +20,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Hello"
-        android:background="@drawable/background_right"
+        android:background="@drawable/background_message"
         android:layout_alignParentEnd="true"
         android:id="@+id/show_message"
-        android:textSize="18sp"
-        android:textColor="#fff"
-        android:padding="8dp"
+        android:textSize="@dimen/txt_size_18"
+        android:textColor="@color/white"
+        android:padding="@dimen/size_8dp"
         android:layout_alignParentRight="true"/>
 
     <TextView

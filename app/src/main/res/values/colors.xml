@@ -12,4 +12,5 @@
     <color name="background_btn">#ffb3d1</color>
     <color name="background_toolbar">#ffcce0</color>
     <color name="online_off">#bfbfbf</color>
+    <color name="msg_color">#ffe6f0</color>
 </resources>
