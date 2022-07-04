@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/main_pink"
     android:gravity="center"
     android:orientation="vertical"
     tools:context=".StartActivity">
@@ -12,36 +12,35 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"
-        android:text="Chat App"
-        android:textSize="25sp"
-        android:textStyle="bold" />
+        android:text="@string/app_name"
+        android:textSize="@dimen/txt_size"
+        android:textStyle="bold"
+        android:textColor="@color/white"/>
 
     <Button
         android:id="@+id/start_button_register"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="20dp"
-        android:layout_marginTop="100dp"
-        android:layout_marginRight="20dp"
-        android:background="@drawable/button"
-        android:foreground="?android:attr/selectableItemBackground"
+        android:layout_marginLeft="@dimen/size_20dp"
+        android:layout_marginTop="@dimen/size_100dp"
+        android:layout_marginRight="@dimen/size_20dp"
+        android:background="@drawable/background_button"
         android:text="@string/registration"
         android:textAllCaps="false"
-        android:textColor="#FE5295"
-        android:textSize="20sp" />
+        android:textColor="@color/main_pink"
+        android:textSize="@dimen/txt_size_20" />
 
     <Button
         android:id="@+id/start_button_login"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="20dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginRight="20dp"
-        android:background="@drawable/button"
-        android:foreground="?android:attr/selectableItemBackground"
+        android:layout_marginLeft="@dimen/txt_size_20"
+        android:layout_marginTop="@dimen/size_10dp"
+        android:layout_marginRight="@dimen/size_20dp"
+        android:background="@drawable/background_button"
         android:text="@string/Login"
         android:textAllCaps="false"
-        android:textColor="#FE5295"
-        android:textSize="20sp" />
+        android:textColor="@color/main_pink"
+        android:textSize="@dimen/txt_size_20" />
 
 </LinearLayout>

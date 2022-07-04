@@ -18,24 +18,25 @@
 
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/profile_image"
-                android:layout_width="30dp"
-                android:layout_height="30dp" />
+                android:layout_width="@dimen/size_50dp"
+                android:layout_height="@dimen/size_50dp" />
 
             <TextView
                 android:id="@+id/user_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="25dp"
-                android:text="Username"
-                android:textColor="@color/white"
+                android:layout_marginLeft="@dimen/size_25dp"
+                android:text="@string/username"
+                android:textColor="@color/pink"
+                android:textSize="@dimen/txt_size"
                 android:textStyle="bold" />
         </androidx.appcompat.widget.Toolbar>
 
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/tab_layout"
             android:layout_width="match_parent"
-            android:layout_height="90dp"
-            android:background="@color/purple_200"
+            android:layout_height="@dimen/size_90dp"
+            android:background="@color/main_pink"
             app:tabIndicatorColor="@color/white"
             app:tabSelectedTextColor="@color/white"
             app:tabTextColor="@color/white" />
