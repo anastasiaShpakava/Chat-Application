@@ -45,17 +45,10 @@ class UserFragment : Fragment() {
         recyclerView?.layoutManager = LinearLayoutManager(context)
 
         userViewModel = ViewModelProvider(this)[UserViewModel::class.java]
-        userViewModel?.getAllUsers()?.observe(viewLifecycleOwner)
-        { responseObject ->
-            var a = responseObject.id
-            Log.d("iiii",a!!)
-            usersList?.addAll(listOf(responseObject))
-        }
 
-        // readUsers()
 
-        userAdapter = UserAdapter(requireContext(), usersList!!, false)
-        recyclerView?.adapter = userAdapter
+       readUsers()
+
 
         searchEdit = view.findViewById(R.id.search_users)
         searchEdit?.addTextChangedListener(object : TextWatcher {
@@ -107,28 +100,11 @@ class UserFragment : Fragment() {
         })
     }
 
-//    private fun readUsers() {
-//        var firebaseUser: FirebaseUser? = FirebaseAuth.getInstance().currentUser
-//        var databaseReference: DatabaseReference =
-//            FirebaseDatabase.getInstance().getReference("Users")
-//
-//        databaseReference.addValueEventListener(object : ValueEventListener {
-//            override fun onDataChange(dataSnapshot: DataSnapshot) {
-//                usersList?.clear()
-//                for (data: DataSnapshot in dataSnapshot.children) {
-//                    val user: User? = data.getValue(User::class.java)
-//                    if (!user?.id.equals(firebaseUser?.uid)) {
-//                        usersList?.add(user!!)
-//                    }
-//                }
-//                userAdapter = UserAdapter(context!!, usersList!!, false)
-//                recyclerView?.adapter = userAdapter
-//            }
-//
-//            override fun onCancelled(error: DatabaseError) {
-//                // Failed to read value
-//
-//            }
-//        })
-//    }
+    private fun readUsers() {
+
+                userAdapter = UserAdapter(requireContext(), userViewModel?.getAllUsers(), false)
+                recyclerView?.adapter = userAdapter
+
+
+    }
 }
