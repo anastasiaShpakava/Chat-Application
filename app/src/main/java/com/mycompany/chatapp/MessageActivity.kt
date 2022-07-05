@@ -6,9 +6,7 @@ import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.TextView
 import android.widget.Toast
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.widget.Toolbar
-import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -23,9 +21,9 @@ import de.hdodenhof.circleimageview.CircleImageView
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import android.Manifest
 import android.content.SharedPreferences
-import android.content.pm.PackageManager
+import com.mycompany.chatapp.network.APIService
+import com.mycompany.chatapp.network.Client
 
 class MessageActivity : AppCompatActivity() {
 

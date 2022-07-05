@@ -28,7 +28,6 @@ class ChatsFragment : Fragment() {
 
     private var userList: List<ChatList>? = null
     private var mUser: List<User>? = null
-    private var chatList: List<Chat>? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

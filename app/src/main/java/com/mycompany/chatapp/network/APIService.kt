@@ -1,4 +1,4 @@
-package com.mycompany.chatapp
+package com.mycompany.chatapp.network
 
 import com.mycompany.chatapp.notifications.MyResponse
 import com.mycompany.chatapp.notifications.Sender
