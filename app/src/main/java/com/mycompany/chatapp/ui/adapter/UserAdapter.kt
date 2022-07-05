@@ -1,4 +1,4 @@
-package com.mycompany.chatapp.adapter
+package com.mycompany.chatapp.ui.adapter
 
 import android.content.Context
 import android.content.Intent
@@ -11,12 +11,11 @@ import com.bumptech.glide.Glide
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.*
-import com.mycompany.chatapp.MessageActivity
+import com.mycompany.chatapp.ui.MessageActivity
 import com.mycompany.chatapp.R
 import com.mycompany.chatapp.model.Chat
 import com.mycompany.chatapp.model.User
 import de.hdodenhof.circleimageview.CircleImageView
-import org.w3c.dom.Text
 
 class UserAdapter(
     private val context: Context,

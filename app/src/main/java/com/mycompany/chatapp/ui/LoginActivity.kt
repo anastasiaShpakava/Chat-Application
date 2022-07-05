@@ -1,4 +1,4 @@
-package com.mycompany.chatapp
+package com.mycompany.chatapp.ui
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
@@ -9,6 +9,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.widget.Toolbar
 import com.google.firebase.auth.FirebaseAuth
+import com.mycompany.chatapp.R
 
 class LoginActivity : AppCompatActivity() {
 

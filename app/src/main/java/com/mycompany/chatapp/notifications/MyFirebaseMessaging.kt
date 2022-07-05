@@ -10,13 +10,12 @@ import android.media.RingtoneManager
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import androidx.core.app.NotificationCompat
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
-import com.mycompany.chatapp.MessageActivity
+import com.mycompany.chatapp.ui.MessageActivity
 
 class MyFirebaseMessaging : FirebaseMessagingService() {
 

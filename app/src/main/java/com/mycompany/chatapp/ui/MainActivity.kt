@@ -1,4 +1,4 @@
-package com.mycompany.chatapp
+package com.mycompany.chatapp.ui
 
 import android.content.Intent
 import android.os.Bundle
@@ -17,12 +17,12 @@ import com.bumptech.glide.Glide
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.*
-import com.mycompany.chatapp.fragments.ChatsFragment
-import com.mycompany.chatapp.fragments.ProfileFragment
-import com.mycompany.chatapp.fragments.UserFragment
+import com.mycompany.chatapp.R
+import com.mycompany.chatapp.ui.fragments.ChatsFragment
+import com.mycompany.chatapp.ui.fragments.ProfileFragment
+import com.mycompany.chatapp.ui.fragments.UserFragment
 import com.mycompany.chatapp.model.Chat
 import com.mycompany.chatapp.model.User
-import com.mycompany.chatapp.notifications.Data
 import de.hdodenhof.circleimageview.CircleImageView
 
 class MainActivity : AppCompatActivity() {

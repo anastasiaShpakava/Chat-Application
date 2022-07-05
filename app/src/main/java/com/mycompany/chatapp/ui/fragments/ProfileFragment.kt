@@ -1,4 +1,4 @@
-package com.mycompany.chatapp.fragments
+package com.mycompany.chatapp.ui.fragments
 
 import android.app.Activity
 import android.app.ProgressDialog
@@ -24,16 +24,8 @@ import com.mycompany.chatapp.model.User
 import de.hdodenhof.circleimageview.CircleImageView
 
 import androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult
-import com.google.android.gms.tasks.Continuation
-import com.google.android.gms.tasks.OnCompleteListener
-import com.google.android.gms.tasks.OnFailureListener
-import com.google.android.gms.tasks.Task
 
 import com.google.firebase.storage.UploadTask
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
-import java.lang.Exception
-import java.util.*
 
 
 class ProfileFragment : Fragment() {

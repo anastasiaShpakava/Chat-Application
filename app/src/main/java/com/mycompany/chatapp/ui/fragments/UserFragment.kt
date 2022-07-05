@@ -1,4 +1,4 @@
-package com.mycompany.chatapp.fragments
+package com.mycompany.chatapp.ui.fragments
 
 import android.os.Bundle
 import android.text.Editable
@@ -14,9 +14,8 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.*
 import com.mycompany.chatapp.R
-import com.mycompany.chatapp.adapter.UserAdapter
+import com.mycompany.chatapp.ui.adapter.UserAdapter
 import com.mycompany.chatapp.model.User
-import java.util.*
 import kotlin.collections.ArrayList
 
 class UserFragment : Fragment() {

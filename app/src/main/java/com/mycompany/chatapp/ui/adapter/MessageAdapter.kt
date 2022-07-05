@@ -1,7 +1,6 @@
-package com.mycompany.chatapp.adapter
+package com.mycompany.chatapp.ui.adapter
 
 import android.content.Context
-import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,10 +9,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
-import com.mycompany.chatapp.MessageActivity
 import com.mycompany.chatapp.R
 import com.mycompany.chatapp.model.Chat
-import com.mycompany.chatapp.model.User
 import de.hdodenhof.circleimageview.CircleImageView
 
 class MessageAdapter(

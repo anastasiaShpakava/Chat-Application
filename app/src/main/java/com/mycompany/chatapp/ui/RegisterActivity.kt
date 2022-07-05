@@ -1,4 +1,4 @@
-package com.mycompany.chatapp
+package com.mycompany.chatapp.ui
 
 import android.content.Intent
 import android.os.Bundle
@@ -11,6 +11,7 @@ import androidx.appcompat.widget.Toolbar
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
+import com.mycompany.chatapp.R
 
 class RegisterActivity : AppCompatActivity() {
 

@@ -1,4 +1,4 @@
-package com.mycompany.chatapp.fragments
+package com.mycompany.chatapp.ui.fragments
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -12,8 +12,7 @@ import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.*
 import com.google.firebase.iid.FirebaseInstanceId
 import com.mycompany.chatapp.R
-import com.mycompany.chatapp.adapter.UserAdapter
-import com.mycompany.chatapp.model.Chat
+import com.mycompany.chatapp.ui.adapter.UserAdapter
 import com.mycompany.chatapp.model.ChatList
 import com.mycompany.chatapp.model.User
 import com.mycompany.chatapp.notifications.Token

@@ -1,4 +1,4 @@
-package com.mycompany.chatapp
+package com.mycompany.chatapp.ui
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -13,7 +13,7 @@ import com.bumptech.glide.Glide
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.*
-import com.mycompany.chatapp.adapter.MessageAdapter
+import com.mycompany.chatapp.ui.adapter.MessageAdapter
 import com.mycompany.chatapp.model.Chat
 import com.mycompany.chatapp.model.User
 import com.mycompany.chatapp.notifications.*
@@ -22,6 +22,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import android.content.SharedPreferences
+import com.mycompany.chatapp.R
 import com.mycompany.chatapp.network.APIService
 import com.mycompany.chatapp.network.Client
 
