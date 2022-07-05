@@ -3,6 +3,13 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/349Dell/AndroidStudioProjects/Chat_App/Chat-Application/app/src/main/res/layout/activity_main.xml" value="0.2857789855072464" />
+        <entry key="..\:/Users/349Dell/AndroidStudioProjects/Chat_App/Chat-Application/app/src/main/res/layout/activity_message.xml" value="0.2857789855072464" />
+        <entry key="..\:/Users/349Dell/AndroidStudioProjects/Chat_App/Chat-Application/app/src/main/res/layout/content_main.xml" value="0.27943840579710144" />
+        <entry key="..\:/Users/349Dell/AndroidStudioProjects/Chat_App/Chat-Application/app/src/main/res/layout/content_reset_password.xml" value="0.23072916666666668" />
+        <entry key="..\:/Users/349Dell/AndroidStudioProjects/Chat_App/Chat-Application/app/src/main/res/layout/fragment_chats.xml" value="0.2857789855072464" />
+        <entry key="..\:/Users/349Dell/AndroidStudioProjects/Chat_App/Chat-Application/app/src/main/res/layout/fragment_user.xml" value="0.23072916666666668" />
+        <entry key="..\:/Users/349Dell/AndroidStudioProjects/Chat_App/Chat-Application/app/src/main/res/menu/menu.xml" value="0.23072916666666668" />
         <entry key="..\:/Users/Anastasia/AndroidStudioProjects/ChatApp/Chat-Application/app/src/main/res/drawable/background_button.xml" value="0.13072916666666667" />
         <entry key="..\:/Users/Anastasia/AndroidStudioProjects/ChatApp/Chat-Application/app/src/main/res/drawable/background_left.xml" value="0.17083333333333334" />
         <entry key="..\:/Users/Anastasia/AndroidStudioProjects/ChatApp/Chat-Application/app/src/main/res/drawable/background_message.xml" value="0.17083333333333334" />
