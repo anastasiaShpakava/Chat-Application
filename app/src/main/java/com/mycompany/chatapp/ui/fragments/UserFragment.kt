@@ -45,9 +45,19 @@ class UserFragment : Fragment() {
         recyclerView?.layoutManager = LinearLayoutManager(context)
 
         userViewModel = ViewModelProvider(this)[UserViewModel::class.java]
+        userViewModel?.getAllUsers()?.observe(this) { responseObject ->
+//            resultTotalCount = responseObject.getTotal_count()
+//            val result: String = resultTotalCount.toString()
+//            val totalResults = getString(R.string.total_count, result)
+//            textView.setText(totalResults)
+            var s1 = responseObject.id
+            Log.d("jjj", s1!!)
+            usersList?.add(responseObject)
+            readUsers()
+        }
 
 
-       readUsers()
+
 
 
         searchEdit = view.findViewById(R.id.search_users)
@@ -102,7 +112,8 @@ class UserFragment : Fragment() {
 
     private fun readUsers() {
 
-                userAdapter = UserAdapter(requireContext(), userViewModel?.getAllUsers(), false)
+
+                userAdapter = UserAdapter(requireContext(), usersList!!, false)
                 recyclerView?.adapter = userAdapter
 
 

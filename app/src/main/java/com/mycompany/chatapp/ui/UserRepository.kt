@@ -28,11 +28,6 @@ class UserRepository {
                         usersList?.postValue(user!!)
                     }
                 }
-                var usersListsss: MutableLiveData<User>? = MutableLiveData()
-                usersListsss=usersList
-                Log.d("LISTUSERS",usersListsss.toString())
-//                userAdapter = UserAdapter(context!!, usersList!!, false)
-//                recyclerView?.adapter = userAdapter
             }
 
             override fun onCancelled(error: DatabaseError) {
