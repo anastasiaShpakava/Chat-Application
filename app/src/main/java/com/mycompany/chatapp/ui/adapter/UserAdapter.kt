@@ -19,7 +19,7 @@ import de.hdodenhof.circleimageview.CircleImageView
 
 class UserAdapter(
     private val context: Context,
-    private val users: List<User>,
+    private var users: List<User>,
     private val isChat: Boolean
 ) :
     RecyclerView.Adapter<UserAdapter.ViewHolder>() {
@@ -65,6 +65,10 @@ class UserAdapter(
         }
     }
 
+    fun setUsersList(users: List<User>) {
+        this.users = users.toMutableList()
+        notifyDataSetChanged()
+    }
     override fun getItemCount(): Int {
         return users.size
     }

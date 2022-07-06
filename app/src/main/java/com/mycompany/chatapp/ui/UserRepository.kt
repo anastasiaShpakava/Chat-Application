@@ -36,7 +36,8 @@ class UserRepository {
             }
         })
         return usersList
-    }
+
+  }
 
     fun getAllUsers(): MutableLiveData<User>?{
         return usersList

@@ -115,6 +115,7 @@ class UserFragment : Fragment() {
 
                 userAdapter = UserAdapter(requireContext(), usersList!!, false)
                 recyclerView?.adapter = userAdapter
+        userAdapter?.setUsersList(usersList!!)
 
 
     }
