@@ -5,19 +5,16 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import com.mycompany.chatapp.model.User
 
-class UserViewModel(application: Application) : AndroidViewModel(application) {
+class UserViewModel(application: Application) : AndroidViewModel(application){
 
-    private var userRepository:UserRepository?=null
-    private var usersList: MutableLiveData<User>? = MutableLiveData()
+    private var userRepository: UserRepository? = UserRepository()
+    private var mutableLiveData: MutableLiveData<List<User>>? = MutableLiveData()
 
     init {
-        userRepository = UserRepository()
-        usersList = userRepository?.getAllUsers()
+        mutableLiveData?.value=userRepository?.readUsers()
     }
 
-    fun getAllUsers(): MutableLiveData<User>?{
-        userRepository = UserRepository()
-        usersList = userRepository?.readUsers()
-        return usersList
+    fun getAllUsers(): MutableLiveData<List<User>>? {
+        return mutableLiveData
     }
 }

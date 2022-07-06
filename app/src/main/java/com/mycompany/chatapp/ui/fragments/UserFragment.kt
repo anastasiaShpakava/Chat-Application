@@ -9,6 +9,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -22,8 +23,6 @@ import kotlin.collections.ArrayList
 import com.mycompany.chatapp.R
 
 
-
-
 class UserFragment : Fragment() {
 
     private var recyclerView: RecyclerView? = null
@@ -32,7 +31,7 @@ class UserFragment : Fragment() {
     private var userAdapter: UserAdapter? = null
     private var usersList: ArrayList<User>? = ArrayList()
 
-    private var userViewModel:UserViewModel?=null
+    private var userViewModel: UserViewModel? = null
 
 
     override fun onCreateView(
@@ -44,20 +43,18 @@ class UserFragment : Fragment() {
         recyclerView?.setHasFixedSize(true)
         recyclerView?.layoutManager = LinearLayoutManager(context)
 
-        userViewModel = ViewModelProvider(this)[UserViewModel::class.java]
-        userViewModel?.getAllUsers()?.observe(this) { responseObject ->
-//            resultTotalCount = responseObject.getTotal_count()
-//            val result: String = resultTotalCount.toString()
-//            val totalResults = getString(R.string.total_count, result)
-//            textView.setText(totalResults)
-            var s1 = responseObject.id
-            Log.d("jjj", s1!!)
-            usersList?.add(responseObject)
-            readUsers()
-        }
+      //  userViewModel = ViewModelProvider(this)[UserViewModel::class.java]
 
+     //   userViewModel?.getList()
 
-
+//        userViewModel?.getAllUsers()?.observe(this) { responseObject ->
+//            usersList = responseObject as ArrayList<User>?
+//        }
+//        userViewModel?.getAllUsers()?.observe(viewLifecycleOwner,
+//            { t ->
+//                userAdapter = UserAdapter(requireContext(), t!!, false)
+//                recyclerView?.adapter = userAdapter
+//            })
 
 
         searchEdit = view.findViewById(R.id.search_users)
@@ -76,6 +73,16 @@ class UserFragment : Fragment() {
         })
 
         return view
+    }
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        userViewModel = ViewModelProvider(this)[UserViewModel::class.java]
+        userViewModel?.getAllUsers()?.observe(viewLifecycleOwner,
+            { t ->
+                userAdapter = UserAdapter(requireContext(), t!!, false)
+                recyclerView?.adapter = userAdapter
+            })
     }
 
     private fun searchUsers(s: String) {
@@ -110,13 +117,4 @@ class UserFragment : Fragment() {
         })
     }
 
-    private fun readUsers() {
-
-
-                userAdapter = UserAdapter(requireContext(), usersList!!, false)
-                recyclerView?.adapter = userAdapter
-        userAdapter?.setUsersList(usersList!!)
-
-
-    }
 }
