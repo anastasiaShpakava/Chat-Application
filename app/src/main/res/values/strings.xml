@@ -21,4 +21,8 @@
     <string name="forgot_password">Forgot your password</string>
     <string name="search">Search...</string>
     <string name="profile">Profile</string>
+    <string name="no_message">No messages</string>
+    <string name="default_value">default</string>
+    <string name="online">online</string>
+
 </resources>

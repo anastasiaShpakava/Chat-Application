@@ -15,6 +15,7 @@ import com.mycompany.chatapp.ui.MessageActivity
 import com.mycompany.chatapp.R
 import com.mycompany.chatapp.model.Chat
 import com.mycompany.chatapp.model.User
+import com.mycompany.chatapp.utils.ActivityConstants
 import de.hdodenhof.circleimageview.CircleImageView
 
 class UserAdapter(
@@ -35,7 +36,7 @@ class UserAdapter(
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val user: User = users[position]
         holder.username.text = user.username
-        if (user.imageUrl.equals("default")) {
+        if (user.imageUrl.equals(context.applicationContext.getString(R.string.default_value))) {
             holder.profileImage.setImageResource(R.mipmap.ic_launcher)
         } else {
             Glide.with(context).load(user.imageUrl).into(holder.profileImage)
@@ -47,7 +48,7 @@ class UserAdapter(
         }
 
         if (isChat) {
-            if (user.status.equals("online")) {
+            if (user.status.equals(context.applicationContext.getString(R.string.online))) {
                 holder.imageOn.visibility = View.VISIBLE
                 holder.imageOff.visibility = View.GONE
             } else {
@@ -60,15 +61,11 @@ class UserAdapter(
         }
         holder.itemView.setOnClickListener {
             var intent = Intent(context, MessageActivity::class.java)
-            intent.putExtra("userid", user.id)
+            intent.putExtra(ActivityConstants.USER_ID, user.id)
             context.startActivity(intent)
         }
     }
 
-    fun setUsersList(users: List<User>) {
-        this.users = users.toMutableList()
-        notifyDataSetChanged()
-    }
     override fun getItemCount(): Int {
         return users.size
     }
@@ -82,10 +79,10 @@ class UserAdapter(
     }
 
     private fun lastMessage(userid: String, lastMsg: TextView) {
-        lastMessage = "default"
-        var firebaseUser: FirebaseUser? = FirebaseAuth.getInstance().currentUser
-        var databaseReference: DatabaseReference =
-            FirebaseDatabase.getInstance().getReference("Chats")
+        lastMessage = context.applicationContext.getString(R.string.default_value)
+        val firebaseUser: FirebaseUser? = FirebaseAuth.getInstance().currentUser
+        val databaseReference: DatabaseReference =
+            FirebaseDatabase.getInstance().getReference(ActivityConstants.CHATS)
 
         databaseReference.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
@@ -96,12 +93,13 @@ class UserAdapter(
                     }
                 }
                 when (lastMessage) {
-                    "default" -> lastMsg.text = "No message"
+                    context.applicationContext.getString(R.string.default_value) -> lastMsg.text =
+                        context.applicationContext.getString(R.string.no_message)
 
                     else -> lastMsg.text = lastMessage
                 }
 
-                lastMessage = "default"
+                lastMessage = context.applicationContext.getString(R.string.default_value)
             }
 
             override fun onCancelled(error: DatabaseError) {
@@ -109,6 +107,5 @@ class UserAdapter(
             }
 
         })
-
     }
 }
