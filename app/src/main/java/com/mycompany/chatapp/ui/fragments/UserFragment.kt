@@ -60,7 +60,6 @@ class UserFragment : Fragment() {
     private fun readUsers() {
         userViewModel?.getAllUsers()?.observe(viewLifecycleOwner,
             { t ->
-
                 userAdapter = UserAdapter(requireContext(), t!!, false)
                 recyclerView?.adapter = userAdapter
             })
@@ -69,7 +68,6 @@ class UserFragment : Fragment() {
     private fun searchUsers(s: String) {
         userViewModel?.getSearchingAllUsers(s)?.observe(viewLifecycleOwner,
             { t ->
-
                 userAdapter = UserAdapter(context!!, t!!, false)
                 recyclerView?.adapter = userAdapter
             })

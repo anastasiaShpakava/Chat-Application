@@ -10,6 +10,7 @@ class UserViewModel(application: Application) : AndroidViewModel(application) {
 
     private var userRepository: UserRepository? = UserRepository()
     private var mutableLiveData: MutableLiveData<List<User>>? = MutableLiveData()
+    private var searchMutableLiveData: MutableLiveData<List<User>>? = MutableLiveData()
 
     fun getAllUsers(): MutableLiveData<List<User>>? {
         userRepository?.readUsers(object : UserRepository.ReadUsersCallback {
@@ -22,11 +23,11 @@ class UserViewModel(application: Application) : AndroidViewModel(application) {
 
     fun getSearchingAllUsers(s: String): MutableLiveData<List<User>>? {
         userRepository?.searchUsers(s, object : UserRepository.SearchUsersCallback {
-            override fun onCallbackSearchUsers(usersList: ArrayList<User>) {
-                mutableLiveData?.value = usersList
+            override fun onCallbackSearchUsers(searchList: ArrayList<User>) {
+                searchMutableLiveData?.value = searchList
             }
 
         })
-        return mutableLiveData
+        return searchMutableLiveData
     }
 }

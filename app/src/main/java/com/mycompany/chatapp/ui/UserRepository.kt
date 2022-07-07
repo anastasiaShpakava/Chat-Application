@@ -8,6 +8,7 @@ import com.mycompany.chatapp.utils.ActivityConstants
 
 class UserRepository {
     private var usersList: ArrayList<User>? = ArrayList()
+    private var searchList: ArrayList<User>? = ArrayList()
 
     fun readUsers(myCallback: ReadUsersCallback) {
         val firebaseUser: FirebaseUser? = FirebaseAuth.getInstance().currentUser
@@ -41,16 +42,15 @@ class UserRepository {
 
         query.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
-                usersList?.clear()
+                searchList?.clear()
 
                 for (dataSnapshot: DataSnapshot in snapshot.children) {
                     val user: User? = dataSnapshot.getValue(User::class.java)
-
                     if (!user?.id.equals(firebaseUser?.uid)) {
-                        usersList?.add(user!!)
+                        searchList?.add(user!!)
                     }
-                    searchUsersCallback.onCallbackSearchUsers(usersList!!)
                 }
+                searchUsersCallback.onCallbackSearchUsers(searchList!!)
             }
 
             override fun onCancelled(error: DatabaseError) {
@@ -65,6 +65,6 @@ class UserRepository {
     }
 
     interface SearchUsersCallback {
-        fun onCallbackSearchUsers(usersList: ArrayList<User>)
+        fun onCallbackSearchUsers(searchList: ArrayList<User>)
     }
 }
